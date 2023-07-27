@@ -7,16 +7,26 @@ import java.io.OutputStream;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import service.ActorService;
-import service.MovieService;
+import service.*;
 
 public class Controller implements HttpHandler {
 
+	private static Controller instance;
 	private ActorService actorService;
 	private MovieService movieService;
 
-	// TODO: singleton here and DI
-
+	private Controller() {
+		actorService = new ActorServiceImpl();
+		movieService = new MovieServiceImpl();
+	}
+	
+	public static Controller getInstance() {
+		if (instance == null) {
+			instance = new Controller();
+		}
+		return instance;
+	}
+	
 	@Override
 	public void handle(HttpExchange request) throws IOException {
 		String path;
