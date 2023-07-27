@@ -3,7 +3,7 @@ package persistence;
 import java.util.*;
 import pojo.Movie;
 
-public class MovieStub {
+public class MovieStub implements MovieDAO {
 	List<Movie> list = new ArrayList<>();
 	
 	public MovieStub() {
