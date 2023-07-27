@@ -1,6 +1,7 @@
 package web;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -18,12 +19,16 @@ public class Controller implements HttpHandler {
 
 	@Override
 	public void handle(HttpExchange request) throws IOException {
-		String requestName;
+		String path;
+		String queyString;
+		InputStream requestBody; 
 
 		try {
-			requestName = URIParser(request.getRequestURI().toString());
-
-			switch (requestName) {
+			path = request.getRequestURI().getPath().replaceFirst("^/api/v1/", "");;
+			queyString = request.getRequestURI().getQuery();
+			requestBody = request.getRequestBody();
+			
+			switch (path) {
 			case "addActor":
 				addActor(request);
 				break;
@@ -86,10 +91,6 @@ public class Controller implements HttpHandler {
 
 	private void computeBaconPath(HttpExchange request) {
 
-	}
-
-	private String URIParser(String uri) {
-		return uri.replaceFirst("^/api/v1/", "");
 	}
 
 }
