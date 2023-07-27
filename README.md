@@ -5,5 +5,5 @@
 |:--------:|:-------------:|:------------:|
 | Zhenxu(Mason) Wang | Weilei424 | masonw@my.yorku.ca |
 | Rebal Mallick  | mallick-rebal | rebal97@my.yorku.ca |
-|       |       |       |
+| Arian Quader | quader-arian | arianq@my.yorku.ca |
 |       |       |       |
