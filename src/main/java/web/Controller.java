@@ -1,12 +1,19 @@
 package web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.stream.Collectors;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import constants.HttpStatus;
 import service.*;
 
 public class Controller implements HttpHandler {
@@ -30,13 +37,9 @@ public class Controller implements HttpHandler {
 	@Override
 	public void handle(HttpExchange request) throws IOException {
 		String path;
-		String queyString;
-		InputStream requestBody; 
 
 		try {
 			path = request.getRequestURI().getPath().replaceFirst("^/api/v1/", "");;
-			queyString = request.getRequestURI().getQuery();
-			requestBody = request.getRequestBody();
 			
 			switch (path) {
 			case "addActor":
@@ -87,8 +90,14 @@ public class Controller implements HttpHandler {
 
 	}
 
-	private void getMovie(HttpExchange request) {
-
+	private void getMovie(HttpExchange request) throws JSONException, IOException {
+		String query = request.getRequestURI().getQuery();
+		String response = movieService.getMovie(query).toString();
+		
+		request.sendResponseHeaders(HttpStatus.OK, response.length());
+		OutputStream os = request.getResponseBody();
+		os.write(response.getBytes());
+		os.close();
 	}
 
 	private void hasRelationShip(HttpExchange request) {
@@ -101,6 +110,14 @@ public class Controller implements HttpHandler {
 
 	private void computeBaconPath(HttpExchange request) {
 
+	}
+	
+	private JSONObject requestToJSONObjectParser(InputStream requestBody) throws JSONException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+		String jsonString = reader.lines().collect(Collectors.joining());
+		JSONObject jsonObject = new JSONObject(jsonString);
+		
+		return jsonObject;
 	}
 
 }
