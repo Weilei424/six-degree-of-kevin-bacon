@@ -1,23 +1,23 @@
 package pojo;
 
 public class Movie {
-	private Long id;
+	private String id;
 	private String name;
 	
 	public Movie() {
 		super();
 	}
 
-	public Movie(Long id, String name) {
+	public Movie(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
