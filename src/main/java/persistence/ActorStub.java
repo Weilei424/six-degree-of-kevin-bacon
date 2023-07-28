@@ -26,10 +26,4 @@ public class ActorStub implements ActorDAO {
 				new Actor()
 				);
 	}
-
-	@Override
-	public Actor getActor(String query) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
