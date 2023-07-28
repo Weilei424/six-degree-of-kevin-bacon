@@ -1,5 +1,7 @@
 package persistence;
 
-public interface MovieDAO {
+import pojo.Movie;
 
+public interface MovieDAO {
+	Movie getMovie(String query);
 }
