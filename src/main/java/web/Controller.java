@@ -86,7 +86,18 @@ public class Controller implements HttpHandler {
 
 	}
 
-	private void getActor(HttpExchange request) {
+	private void getActor(HttpExchange request) throws JSONException, IOException {
+		 // Get the query parameter from the request URI
+	    String query = request.getRequestURI().getQuery();
+
+	    // Call the ActorService to get the actor data
+	    String response = actorService.getActor(query).toString();
+
+	    // Set the response headers and send the response to the client
+	    request.sendResponseHeaders(HttpStatus.OK, response.length());
+	    OutputStream os = request.getResponseBody();
+	    os.write(response.getBytes());
+	    os.close();
 
 	}
 

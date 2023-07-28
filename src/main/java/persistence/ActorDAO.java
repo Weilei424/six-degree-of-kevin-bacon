@@ -1,5 +1,7 @@
 package persistence;
 
-public interface ActorDAO {
+import pojo.Actor;
 
+public interface ActorDAO {
+	Actor getActor(String query);
 }
