@@ -1,5 +1,8 @@
 package persistence;
 
-public interface ActorDAO {
+import exceptions.EntityNotFoundException;
+import pojo.Actor;
 
+public interface ActorDAO {
+	Actor getActor(String query) throws EntityNotFoundException;
 }
