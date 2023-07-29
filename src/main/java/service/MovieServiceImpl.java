@@ -2,6 +2,7 @@ package service;
 
 import org.json.JSONObject;
 
+import exceptions.EntityNotFoundException;
 import persistence.MovieDAO;
 import persistence.MovieStub;
 import pojo.Movie;
@@ -17,7 +18,7 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	@Override
-	public JSONObject getMovie(String query) {
+	public JSONObject getMovie(String query) throws EntityNotFoundException {
 		
 		return new JSONObject(movieDAO.getMovie(query));
 	}

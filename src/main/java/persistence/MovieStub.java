@@ -1,6 +1,8 @@
 package persistence;
 
 import java.util.*;
+
+import exceptions.EntityNotFoundException;
 import pojo.Movie;
 
 public class MovieStub implements MovieDAO {
@@ -18,12 +20,12 @@ public class MovieStub implements MovieDAO {
 	}
 
 	@Override
-	public Movie getMovie(String query) {
+	public Movie getMovie(String query) throws EntityNotFoundException {
 		String id = query.replace("movieId=", "");
 		
 		for (Movie m : list) {
 			if (m.getId().equals(id)) return m;
 		}
-		throw new IllegalArgumentException("No such ID");
+		throw new EntityNotFoundException("No such ID");
 	}
 }
