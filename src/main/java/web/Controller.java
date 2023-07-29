@@ -14,6 +14,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import constants.HttpStatus;
+import exceptions.EntityNotFoundException;
+import exceptions.InvalidRequestException;
 import service.*;
 
 public class Controller implements HttpHandler {
@@ -69,8 +71,18 @@ public class Controller implements HttpHandler {
 			default:
 				throw new RuntimeException("Invalid request");
 			}
+		} catch (InvalidRequestException e) {
+			e.printStackTrace();
+			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
+		} /*catch (JSONException e) {
+			e.printStackTrace();
+			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
+		}*/ catch (EntityNotFoundException e) {
+			e.printStackTrace();
+			response(request, e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			e.printStackTrace();
+			response(request, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -90,14 +102,11 @@ public class Controller implements HttpHandler {
 
 	}
 
-	private void getMovie(HttpExchange request) throws JSONException, IOException {
+	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException {
 		String query = request.getRequestURI().getQuery();
 		String response = movieService.getMovie(query).toString();
 		
-		request.sendResponseHeaders(HttpStatus.OK, response.length());
-		OutputStream os = request.getResponseBody();
-		os.write(response.getBytes());
-		os.close();
+		response(request, response, HttpStatus.OK);
 	}
 
 	private void hasRelationShip(HttpExchange request) {
@@ -110,6 +119,13 @@ public class Controller implements HttpHandler {
 
 	private void computeBaconPath(HttpExchange request) {
 
+	}
+	
+	private void response(HttpExchange request, String response, int httpCode) throws IOException {
+		request.sendResponseHeaders(HttpStatus.OK, response.length());
+		OutputStream os = request.getResponseBody();
+		os.write(response.getBytes());
+		os.close();
 	}
 	
 	private JSONObject requestToJSONObjectParser(InputStream requestBody) throws JSONException {
