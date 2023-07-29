@@ -98,8 +98,16 @@ public class Controller implements HttpHandler {
 
 	}
 
-	private void getActor(HttpExchange request) {
+	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException{
+		 // Get the query parameter from the request URI
+	    String query = request.getRequestURI().getQuery();
 
+	    // Call the ActorService to get the actor data
+	    String response = actorService.getActor(query).toString();
+
+	    // Set the response headers and send the response to the client by using helper method
+	    response(request, response, HttpStatus.OK);
+	    
 	}
 
 	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException {
