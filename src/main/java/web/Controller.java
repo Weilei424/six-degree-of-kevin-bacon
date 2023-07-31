@@ -25,8 +25,8 @@ public class Controller implements HttpHandler {
 	private MovieService movieService;
 
 	private Controller() {
-		actorService = new ActorServiceImpl();
-		movieService = new MovieServiceImpl();
+		actorService = ActorServiceImpl.getInstance();
+		movieService = MovieServiceImpl.getInstance();
 	}
 	
 	public static Controller getInstance() {
