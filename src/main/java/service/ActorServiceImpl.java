@@ -36,4 +36,10 @@ public class ActorServiceImpl implements ActorService {
 		
 		return new JSONObject(stub.getActor(query));
 	}
+
+	@Override
+	public String addRelationship(String request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
