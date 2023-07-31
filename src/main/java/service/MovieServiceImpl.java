@@ -35,6 +35,6 @@ public class MovieServiceImpl implements MovieService {
 	@Override
 	public JSONObject getMovie(String query) throws EntityNotFoundException {
 		
-		return new JSONObject(stub.getMovie(query));
+		return new JSONObject(movieDAO.getMovie(query));
 	}
 }
