@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Config;
@@ -51,5 +52,13 @@ public class Utils {
 		isr.close();
 
 		return buf.toString();
+	}
+	
+	public static Map<String, String> jsonParser(String json) {
+		Map<String, String> mapping = new HashMap<>();
+		json = json.replace("{", "");
+		json = json.replace("}", "");
+		String[] arr = json.trim().split(",");
+		return mapping;
 	}
 }
