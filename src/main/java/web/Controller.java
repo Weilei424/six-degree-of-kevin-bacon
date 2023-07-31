@@ -51,7 +51,7 @@ public class Controller implements HttpHandler {
 			case "addMovie":
 				addMovie(request);
 				break;
-			case "addRelationShip":
+			case "addRelationship":
 				addRelationShip(request);
 				break;
 			case "getActor":
@@ -60,7 +60,7 @@ public class Controller implements HttpHandler {
 			case "getMovie":
 				getMovie(request);
 				break;
-			case "hasRelationShip":
+			case "hasRelationship":
 				hasRelationShip(request);
 				break;
 			case "computeBaconNumber":
