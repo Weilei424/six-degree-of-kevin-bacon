@@ -74,4 +74,32 @@ public class Neo4jBooks {
 		}
 	}
 	
+	// use this method for checking relationships, it returns all movies this actor has acted in
+	public StatementResult getMoviesActed(String actorId) {
+		try (Session session = driver.session()) {
+			try (Transaction tx = session.beginTransaction()) {
+				StatementResult sr = tx.run("MATCH (a:actor {id: "
+						+ actorId 
+						+ "})-[:ACTED_IN*1]->(fof)\n"
+						+ "RETURN DISTINCT fof");
+				return sr;
+			}
+		}
+	}
+	
+	public StatementResult addRelationship(String actorId, String movieId) {
+		try (Session session = driver.session()) {
+			try (Transaction tx = session.beginTransaction()) {
+				StatementResult sr = tx.run("MATCH (a:actor), (m:movie)\n"
+						+ "WHERE a.id = "
+						+ actorId 
+						+ " AND m.id = "
+						+ movieId
+						+ "CREATE (a)-[r:ACTED_IN]->(m)\n"
+						+ "RETURN type(r)");
+				return sr;
+			}
+		}
+		
+	}
 }
