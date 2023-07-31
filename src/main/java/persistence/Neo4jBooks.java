@@ -73,4 +73,18 @@ public class Neo4jBooks {
 			}
 		}
 	}
+	
+	public static void main(String[] args) {
+		Neo4jBooks nb = Neo4jBooks.getInstance();
+		StatementResult sr = nb.getNode("01", Movie.class);
+		if (sr.hasNext()) {
+			Record r = sr.next();
+			Movie m = new Movie();
+			m.setId(r.get("id").asString());
+			m.setName(r.get("name").asString());
+			System.out.println(m.getId() + "  " + m.getName());
+		} else {
+			System.out.println("ex");
+		}
+	}
 }
