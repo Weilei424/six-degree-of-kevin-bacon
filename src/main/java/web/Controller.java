@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import ca.yorku.eecs.Utils;
 import constants.HttpStatus;
 import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
@@ -94,11 +95,12 @@ public class Controller implements HttpHandler {
 
 	}
 
-	private void addRelationShip(HttpExchange request) {
-
+	private void addRelationShip(HttpExchange request) throws IOException {
+		String response = actorService.addRelationship(Utils.convert(request.getRequestBody()));
+		response(request, response, HttpStatus.OK);
 	}
 
-	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException{
+	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException {
 		 // Get the query parameter from the request URI
 	    String query = request.getRequestURI().getQuery();
 
