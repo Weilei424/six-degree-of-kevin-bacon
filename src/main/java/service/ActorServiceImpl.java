@@ -50,10 +50,10 @@ public class ActorServiceImpl implements ActorService {
 		String movieId = jsonObject.getString("movieId");
 		String actorId = jsonObject.getString("actorId");
 		
-		getActor(actorId);
-		movieDAO.getMovie(movieId);
+		//getActor(actorId);
+		//movieDAO.getMovie(movieId);
 		actorDAO.addRelationship(actorId, movieId);
 		
-		return "relastionship actor:" + actorId + "->" + "movie:" + movieId + "has been added.";
+		return "relastionship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
 	}
 }
