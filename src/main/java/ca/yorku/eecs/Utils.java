@@ -53,12 +53,4 @@ public class Utils {
 
 		return buf.toString();
 	}
-	
-	public static Map<String, String> jsonParser(String json) {
-		Map<String, String> mapping = new HashMap<>();
-		json = json.replace("{", "");
-		json = json.replace("}", "");
-		String[] arr = json.trim().split(",");
-		return mapping;
-	}
 }
