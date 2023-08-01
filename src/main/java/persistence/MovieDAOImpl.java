@@ -31,7 +31,7 @@ public class MovieDAOImpl implements MovieDAO {
 		
 		if (sr.hasNext()) {
 			Record r = sr.next();
-			movie.setId(r.get("id").asString());
+			movie.setId(r.get("movieId").asString());
 			movie.setName(r.get("name").asString());
 			return movie;
 		} else {
