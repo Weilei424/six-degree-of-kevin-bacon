@@ -34,9 +34,8 @@ public class ActorServiceImpl implements ActorService {
 	
 	@Override
 	public void addActor(JSONObject jsonObject) throws JSONException {
-		// TODO Auto-generated method stub
 		Actor actor;
-		actor = new Actor(jsonObject.getString("id"), jsonObject.getString("name"));
+		actor = new Actor(jsonObject.getString("actorId"), jsonObject.getString("name"));
 		actorDAO.addActor(actor);
 	}
 

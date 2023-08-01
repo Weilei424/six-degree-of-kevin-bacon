@@ -1,7 +1,7 @@
 package pojo;
 
 public class Actor {
-	private String id;
+	private String actorId;
 	private String name;
 	
 	public Actor() {
@@ -9,16 +9,16 @@ public class Actor {
 	}
 
 	public Actor(String id, String name) {
-		this.id = id;
+		this.actorId = id;
 		this.name = name;
 	}
 
 	public String getId() {
-		return id;
+		return actorId;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		this.actorId = id;
 	}
 
 	public String getName() {
