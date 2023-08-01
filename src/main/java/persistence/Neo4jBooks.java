@@ -91,12 +91,12 @@ public class Neo4jBooks {
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
 				StatementResult sr = tx.run("MATCH (a:actor), (m:movie)\n"
-						+ "WHERE a.id = "
-						+ actorId 
-						+ " AND m.id = "
-						+ movieId
+						+ "WHERE a.id = $x AND m.id = $y\n"
 						+ "CREATE (a)-[r:ACTED_IN]->(m)\n"
-						+ "RETURN type(r)");
+						+ "RETURN type(r)",
+						parameters("x", actorId, "y", movieId)
+						);
+				tx.close();
 				return sr;
 			}
 		}
