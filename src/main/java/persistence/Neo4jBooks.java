@@ -87,19 +87,14 @@ public class Neo4jBooks {
 		}
 	}
 	
-	public StatementResult addRelationship(String actorId, String movieId) {
+	public void addRelationship(String actorId, String movieId) {
 		try (Session session = driver.session()) {
-			try (Transaction tx = session.beginTransaction()) {
-				StatementResult sr = tx.run("MATCH (a:actor), (m:movie)\n"
-						+ "WHERE a.id = $x AND m.id = $y\n"
+			session.writeTransaction(tx -> tx.run("MATCH (a:actor), (m:movie)\n"
+						+ "WHERE a.actorId = $x AND m.movieId = $y\n"
 						+ "CREATE (a)-[r:ACTED_IN]->(m)\n"
 						+ "RETURN type(r)",
 						parameters("x", actorId, "y", movieId)
-						);
-				tx.close();
-				return sr;
-			}
+						));
 		}
-		
 	}
 }
