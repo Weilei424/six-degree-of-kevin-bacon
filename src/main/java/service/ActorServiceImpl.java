@@ -1,6 +1,19 @@
 package service;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import pojo.Actor;
+
+import org.neo4j.driver.v1.AuthTokens;
+import org.neo4j.driver.v1.Config;
+import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.GraphDatabase;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Transaction;
+import static org.neo4j.driver.v1.Values.parameters;
 
 import exceptions.EntityNotFoundException;
 import persistence.ActorDAO;
@@ -26,9 +39,11 @@ public class ActorServiceImpl implements ActorService {
 	}
 	
 	@Override
-	public void addActor(JSONObject jsonObject) {
+	public void addActor(JSONObject jsonObject) throws JSONException {
 		// TODO Auto-generated method stub
-		
+		Actor actor;
+		actor = new Actor(jsonObject.getString("id"), jsonObject.getString("name"));
+		actorDAO.addActor(actor);
 	}
 
 	@Override

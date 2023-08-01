@@ -23,6 +23,12 @@ public class ActorDAOImpl implements ActorDAO {
 	@Override
 	public Actor getActor(String query) {
 		// TODO Auto-generated method stub
+		
 		return null;
+	}
+
+	public void addActor(Actor actor) {
+		// TODO Auto-generated method stub
+		nb.addNode(actor.getId(), actor.getName(), Actor.class);
 	}
 }
