@@ -42,4 +42,10 @@ public class ActorStub implements ActorDAO {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'addActor'");
 	}
+
+	@Override
+	public void addRelationship(String actorId, String movieId) {
+		// TODO Auto-generated method stub
+		
+	}
 }
