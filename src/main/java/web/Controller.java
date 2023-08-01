@@ -97,11 +97,9 @@ public class Controller implements HttpHandler {
 	}
 
 	private void addRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
-		System.out.println(Utils.getBody(request));
-		String json = Utils.getBody(request);
-		JSONTokener token = new JSONTokener(json);
-		JSONObject jsonObject = new JSONObject(token);
-		String response = actorService.addRelationship(jsonObject);
+		JSONObject json = JSONObjectParser(request.getRequestBody());
+		String response = actorService.addRelationship(json);
+		
 		response(request, response, HttpStatus.OK);
 	}
 
@@ -143,7 +141,7 @@ public class Controller implements HttpHandler {
 		os.close();
 	}
 	
-	private JSONObject requestToJSONObjectParser(InputStream requestBody) throws JSONException {
+	private JSONObject JSONObjectParser(InputStream requestBody) throws JSONException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
 		String jsonString = reader.lines().collect(Collectors.joining());
 		JSONObject jsonObject = new JSONObject(jsonString);
