@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -75,10 +76,10 @@ public class Controller implements HttpHandler {
 		} catch (InvalidRequestException e) {
 			e.printStackTrace();
 			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
-		} /*catch (JSONException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
-		}*/ catch (EntityNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			e.printStackTrace();
 			response(request, e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
@@ -95,8 +96,12 @@ public class Controller implements HttpHandler {
 
 	}
 
-	private void addRelationShip(HttpExchange request) throws IOException {
-		String response = actorService.addRelationship(Utils.convert(request.getRequestBody()));
+	private void addRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
+		System.out.println(Utils.getBody(request));
+		String json = Utils.getBody(request);
+		JSONTokener token = new JSONTokener(json);
+		JSONObject jsonObject = new JSONObject(token);
+		String response = actorService.addRelationship(jsonObject);
 		response(request, response, HttpStatus.OK);
 	}
 
@@ -132,7 +137,7 @@ public class Controller implements HttpHandler {
 	}
 	
 	private void response(HttpExchange request, String response, int httpCode) throws IOException {
-		request.sendResponseHeaders(HttpStatus.OK, response.length());
+		request.sendResponseHeaders(httpCode, response.length());
 		OutputStream os = request.getResponseBody();
 		os.write(response.getBytes());
 		os.close();
