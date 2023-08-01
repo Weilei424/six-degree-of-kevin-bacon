@@ -9,15 +9,19 @@ import exceptions.EntityNotFoundException;
 import persistence.ActorDAO;
 import persistence.ActorDAOImpl;
 import persistence.ActorStub;
+import persistence.MovieDAO;
+import persistence.MovieDAOImpl;
 
 public class ActorServiceImpl implements ActorService {
 	
 	private ActorDAO stub = new ActorStub(); // Using stub db before we have actual db setup
 	private static ActorServiceImpl instance;
 	private ActorDAO actorDAO;
+	private MovieDAO movieDAO;
 	
 	private ActorServiceImpl() {
 		actorDAO = ActorDAOImpl.getInstance();
+		movieDAO = MovieDAOImpl.getInstance();
 	}
 	
 	public static ActorServiceImpl getInstance() {
@@ -43,8 +47,14 @@ public class ActorServiceImpl implements ActorService {
 	}
 
 	@Override
-	public String addRelationship(String request) {
-		// TODO Auto-generated method stub
-		return null;
+	public String addRelationship(JSONObject jsonObject) throws JSONException, EntityNotFoundException {
+		String movieId = jsonObject.getString("movieId");
+		String actorId = jsonObject.getString("actorId");
+		
+		getActor(actorId);
+		movieDAO.getMovie(movieId);
+		actorDAO.addRelationship(actorId, movieId);
+		
+		return "relastionship actor:" + actorId + "->" + "movie:" + movieId + "has been added.";
 	}
 }

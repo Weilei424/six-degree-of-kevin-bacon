@@ -8,5 +8,5 @@ import exceptions.EntityNotFoundException;
 public interface ActorService {
 	void addActor(JSONObject jsonObject) throws JSONException;
 	JSONObject getActor(String query) throws EntityNotFoundException;
-	String addRelationship(String request);
+	String addRelationship(JSONObject jsonObject) throws JSONException, EntityNotFoundException;
 }
