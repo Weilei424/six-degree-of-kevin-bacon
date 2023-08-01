@@ -36,4 +36,10 @@ public class ActorStub implements ActorDAO {
 		}
 		throw new EntityNotFoundException("No such ID");
 	}
+
+	@Override
+	public void addActor(Actor actor) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'addActor'");
+	}
 }

@@ -1,6 +1,9 @@
 package service;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import pojo.Actor;
 
 import exceptions.EntityNotFoundException;
 import persistence.ActorDAO;
@@ -26,9 +29,11 @@ public class ActorServiceImpl implements ActorService {
 	}
 	
 	@Override
-	public void addActor(JSONObject jsonObject) {
+	public void addActor(JSONObject jsonObject) throws JSONException {
 		// TODO Auto-generated method stub
-		
+		Actor actor;
+		actor = new Actor(jsonObject.getString("id"), jsonObject.getString("name"));
+		actorDAO.addActor(actor);
 	}
 
 	@Override
