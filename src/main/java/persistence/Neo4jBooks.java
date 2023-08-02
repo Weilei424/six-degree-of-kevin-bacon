@@ -10,8 +10,11 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 import static org.neo4j.driver.v1.Values.parameters;
 
+import java.util.List;
+
 import pojo.Actor;
 import pojo.Movie;
+import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
 
 public class Neo4jBooks {
@@ -75,14 +78,20 @@ public class Neo4jBooks {
 	}
 	
 	// use this method for checking relationships, it returns all movies this actor has acted in
-	public StatementResult getMoviesActed(String actorId) {
+	public StatementResult getMoviesActed(String actorId) throws EntityNotFoundException {
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
-				StatementResult sr = tx.run("MATCH (a:actor {id: "
-						+ actorId 
-						+ "})-[:ACTED_IN*1]->(fof)\n"
-						+ "RETURN DISTINCT fof");
-				return sr;
+				StatementResult sr = tx.run("MATCH (a:actor)-[:ACTED_IN*1]->(m:movie)\n"
+						+ "WHERE a.actorId = $i\n"
+						+ "RETURN m.movieId AS movieId, m.name AS name", 
+						parameters("i", actorId)
+						);
+				
+				if (sr.hasNext()) {
+					return sr;
+				} else {
+					throw new EntityNotFoundException("This Actor has not acted in any movie!");
+				}
 			}
 		}
 	}
