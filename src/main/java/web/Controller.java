@@ -71,7 +71,7 @@ public class Controller implements HttpHandler {
 				computeBaconPath(request);
 				break;
 			default:
-				throw new RuntimeException("Invalid request");
+				throw new InvalidRequestException("Invalid request");
 			}
 		} catch (InvalidRequestException e) {
 			e.printStackTrace();
