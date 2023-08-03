@@ -1,11 +1,13 @@
 package service;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import exceptions.EntityNotFoundException;
 import persistence.MovieDAO;
 import persistence.MovieDAOImpl;
 import persistence.MovieStub;
+import pojo.Actor;
 import pojo.Movie;
 
 public class MovieServiceImpl implements MovieService {
@@ -22,19 +24,18 @@ public class MovieServiceImpl implements MovieService {
 		if (instance == null) {
 			instance = new MovieServiceImpl();
 		}
-		
 		return instance;
 	}
 
 	@Override
-	public void addMovie(JSONObject jsonObject) {
-		// TODO Auto-generated method stub
-		
+	public void addMovie(JSONObject jsonObject) throws JSONException {
+		Movie movie;
+		movie = new Movie(jsonObject.getString("movieId"), jsonObject.getString("name"));
+		movieDAO.addMovie(movie);
 	}
 
 	@Override
 	public JSONObject getMovie(String query) throws EntityNotFoundException {
-		
 		return new JSONObject(movieDAO.getMovie(query));
 	}
 }

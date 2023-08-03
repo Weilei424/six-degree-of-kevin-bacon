@@ -28,4 +28,9 @@ public class MovieStub implements MovieDAO {
 		}
 		throw new EntityNotFoundException("No such ID");
 	}
+
+	@Override
+	public void addMovie(Movie movie) {
+		throw new UnsupportedOperationException("Unimplemented method 'addMovie'");
+	}
 }
