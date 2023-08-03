@@ -43,15 +43,17 @@ public class Neo4jBooks {
 	public <T> void addNode(String id, String name, Class<T> c) {
 		
 		try (Session session = driver.session()) {
-			String label = "";
+			String label = "", property = "";;
 			if (c == Movie.class) {
-				label = "m: movie";
+				label = "x:movie";
+				property = "movieId";
 			} else if (c == Actor.class) {
-				label = "a: actor";
+				label = "x:actor";
+				property = "actorId";
 			} else {
 				throw new InvalidRequestException();
 			}
-			String query = String.format("CREATE (%s {id:$i, name:$n})", label);
+			String query = String.format("CREATE (%s {%s:$i, name:$n})", label, property);
             session.writeTransaction(tx -> tx.run(query,
                     parameters("i", id, "n", name)));
 		}
@@ -71,9 +73,7 @@ public class Neo4jBooks {
 				} else {
 					throw new EntityNotFoundException("No such type of record in our database.");
 				}
-				StatementResult sr = tx.run("MATCH ("
-						+ label 
-						+ ")\n"
+				StatementResult sr = tx.run("MATCH (" + label + ")\n"
 						+ "WHERE x." + property + " = $i\n"
 						+ "RETURN x." + property + " AS id, x.name AS name",
 						parameters("i", id)
