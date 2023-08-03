@@ -56,4 +56,16 @@ public class ActorServiceImpl implements ActorService {
 		
 		return "relastionship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
 	}
+
+	@Override
+	public JSONObject getBaconPath(String actorId) {
+		// TODO Convert Path object to JSONObject here
+		return null;
+	}
+
+	@Override
+	public int getBaconNumber(String actorId) {
+		// TODO 
+		return 0;
+	}
 }

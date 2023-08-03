@@ -9,4 +9,6 @@ public interface ActorService {
 	void addActor(JSONObject jsonObject) throws JSONException;
 	JSONObject getActor(String query) throws EntityNotFoundException;
 	String addRelationship(JSONObject jsonObject) throws JSONException, EntityNotFoundException;
+	JSONObject getBaconPath(String actorId);
+	int getBaconNumber(String actorId);
 }

@@ -1,5 +1,7 @@
 package persistence;
 
+import org.neo4j.driver.v1.types.Path;
+
 import pojo.Actor;
 
 public class ActorDAOImpl implements ActorDAO {
@@ -36,4 +38,18 @@ public class ActorDAOImpl implements ActorDAO {
 	public void addRelationship(String actorId, String movieId) {
 		nb.addRelationship(actorId, movieId);
 	}
+
+	@Override
+	public Path getBaconPath(String actorId) {
+		// TODO 
+		return null;
+	}
+
+	@Override
+	public int getBaconNumber(String actorId) {
+		// TODO 
+		return 0;
+	}
+	
+	
 }
