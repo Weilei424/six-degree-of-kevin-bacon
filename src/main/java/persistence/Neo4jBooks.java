@@ -8,6 +8,10 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
+import org.neo4j.driver.v1.types.Path;
+
+import constants.Constants;
+
 import static org.neo4j.driver.v1.Values.parameters;
 
 import java.util.List;
@@ -53,23 +57,25 @@ public class Neo4jBooks {
 		}
 	}
 	
-	public <T> StatementResult getNode(String id, Class<T> c) {
+	public <T> StatementResult getNode(String id, Class<T> c) throws EntityNotFoundException {
 		
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
-				String label = "";
+				String label = "", property = "";
 				if (c == Movie.class) {
 					label = "x:movie";
+					property = "movieId";
 				} else if (c == Actor.class) {
 					label = "x:actor";
+					property = "actorId";
 				} else {
-					throw new InvalidRequestException();
+					throw new EntityNotFoundException("No such type of record in our database.");
 				}
 				StatementResult sr = tx.run("MATCH ("
 						+ label 
-						+ ")\r\n"
-						+ "WHERE x.id = $i\n"
-						+ "RETURN x.id AS id, x.name AS name",
+						+ ")\n"
+						+ "WHERE x." + property + " = $i\n"
+						+ "RETURN x." + property + " AS id, x.name AS name",
 						parameters("i", id)
 						);
 				return sr;
@@ -104,6 +110,29 @@ public class Neo4jBooks {
 						+ "RETURN type(r)",
 						parameters("x", actorId, "y", movieId)
 						));
+		}
+	}
+	
+	public int getBaconNumber(String actorId) throws EntityNotFoundException {
+		return bfs(actorId).length() / 2;
+	}
+	
+	public Path bfs(String actorId) throws EntityNotFoundException {
+		try (Session session = driver.session()) {
+			try (Transaction tx = session.beginTransaction()) {
+				StatementResult sr = tx.run("MATCH p=shortestPath(\n"
+						+ "(a:actor {actorId: $x})-[*]-(b:actor {actorId: $k})\n"
+						+ ")\n"
+						+ "RETURN p as path", 
+						parameters( "x", actorId, "k", Constants.KEVIN_BACON_ID)
+						);
+				
+				if (sr.hasNext()) {
+					return sr.next().get("path").asPath();
+				} else {
+					throw new EntityNotFoundException("There does not exist a path from this actor to Kevin Bacon!");
+				}
+			}
 		}
 	}
 }
