@@ -2,6 +2,8 @@ package persistence;
 
 import java.util.*;
 
+import org.neo4j.driver.v1.types.Path;
+
 import exceptions.EntityNotFoundException;
 import pojo.Actor;
 import pojo.Movie;
@@ -47,5 +49,17 @@ public class ActorStub implements ActorDAO {
 	public void addRelationship(String actorId, String movieId) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Path getBaconPath(String actorId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getBaconNumber(String actorId) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
