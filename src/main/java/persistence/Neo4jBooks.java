@@ -78,7 +78,11 @@ public class Neo4jBooks {
 						+ "RETURN x." + property + " AS id, x.name AS name",
 						parameters("i", id)
 						);
-				return sr;
+				if (sr.hasNext()) {
+					return sr;
+				} else {
+					throw new EntityNotFoundException("This Actor has not acted in any movie!");
+				}
 			}
 		}
 	}
@@ -110,6 +114,23 @@ public class Neo4jBooks {
 						+ "RETURN type(r)",
 						parameters("x", actorId, "y", movieId)
 						));
+		}
+	}
+	
+	public boolean hasRelationship(String actorId, String movieId) throws EntityNotFoundException {
+		try (Session session = driver.session()) {
+			try (Transaction tx = session.beginTransaction()) {
+				StatementResult sr = tx.run("MATCH (a:actor {actorId: $x}), (b:movie {movieId: $y})\n"
+						+ "RETURN EXISTS((a)-[:ACTED_IN]->(b)) AS result",
+						parameters( "x", actorId, "y", movieId)
+						);
+				
+				if (sr.hasNext()) {
+					return sr.next().get("result").asBoolean();
+				} else {
+					throw new EntityNotFoundException("Input actorId or movieId is invalid.");
+				}
+			}
 		}
 	}
 	
