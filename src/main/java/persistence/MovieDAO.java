@@ -5,4 +5,5 @@ import pojo.Movie;
 
 public interface MovieDAO {
 	Movie getMovie(String query) throws EntityNotFoundException;
+	void addMovie(Movie movie);
 }

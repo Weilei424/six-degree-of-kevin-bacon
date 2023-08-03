@@ -4,6 +4,7 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 
 import exceptions.EntityNotFoundException;
+import pojo.Actor;
 import pojo.Movie;
 
 public class MovieDAOImpl implements MovieDAO {
@@ -38,5 +39,10 @@ public class MovieDAOImpl implements MovieDAO {
 		} else {
 			throw new EntityNotFoundException();
 		}
+	}
+
+	@Override
+	public void addMovie(Movie movie) {
+		nb.addNode(movie.getId(), movie.getName(), Movie.class);
 	}
 }
