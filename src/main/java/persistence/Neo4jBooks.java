@@ -135,21 +135,25 @@ public class Neo4jBooks {
 	}
 	
 	public int getBaconNumber(String actorId) throws EntityNotFoundException {
-		return bfs(actorId).length() / 2;
+		return bfs(actorId).get("path").asPath().length() / 2;
 	}
 	
-	public Path bfs(String actorId) throws EntityNotFoundException {
+	/*/
+	 * Use bfs(actorId).get("actorIds").asList()
+	 * to extract the path as a List, all null items are Movie Nodes purposed to be filtered out.
+	 */
+	public Record bfs(String actorId) throws EntityNotFoundException {
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
 				StatementResult sr = tx.run("MATCH p=shortestPath(\n"
 						+ "(a:actor {actorId: $x})-[*]-(b:actor {actorId: $k})\n"
 						+ ")\n"
-						+ "RETURN p as path", 
+						+ "RETURN p as path, [node in nodes(p) | node.actorId] as actorIds", 
 						parameters( "x", actorId, "k", Constants.KEVIN_BACON_ID)
 						);
 				
 				if (sr.hasNext()) {
-					return sr.next().get("path").asPath();
+					return sr.next();
 				} else {
 					throw new EntityNotFoundException("There does not exist a path from this actor to Kevin Bacon!");
 				}
