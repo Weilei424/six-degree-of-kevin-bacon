@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import pojo.Actor;
 
 import exceptions.EntityNotFoundException;
+import exceptions.InvalidRequestException;
 import persistence.ActorDAO;
 import persistence.ActorDAOImpl;
 import persistence.ActorStub;
@@ -33,15 +34,24 @@ public class ActorServiceImpl implements ActorService {
 	}
 	
 	@Override
-	public void addActor(JSONObject jsonObject) throws JSONException {
+	public void addActor(JSONObject jsonObject) throws JSONException, EntityNotFoundException, InvalidRequestException {
+		String actorId = jsonObject.getString("actorId");
+		String name = jsonObject.getString("name");
 		Actor actor;
-		actor = new Actor(jsonObject.getString("actorId"), jsonObject.getString("name"));
-		actorDAO.addActor(actor);
+		actor = new Actor(actorId, name);
+
+		try {
+			getActor("actorId=" + actorId);
+			throw new InvalidRequestException("actorId already exists");
+		} catch (EntityNotFoundException e) {
+			actorDAO.addActor(actor);
+		} catch (InvalidRequestException e) {
+			throw e;
+		}
 	}
 
 	@Override
 	public JSONObject getActor(String query) throws EntityNotFoundException {
-		
 		return new JSONObject(actorDAO.getActor(query));
 	}
 

@@ -75,6 +75,7 @@ public class Controller implements HttpHandler {
 			}
 		} catch (InvalidRequestException e) {
 			e.printStackTrace();
+			System.out.println("hello");
 			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -88,7 +89,7 @@ public class Controller implements HttpHandler {
 		}
 	}
 
-	private void addActor(HttpExchange request) throws JSONException, IOException {
+	private void addActor(HttpExchange request) throws JSONException, IOException, EntityNotFoundException, InvalidRequestException {
 		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
 		actorService.addActor(jsonObject);
 		response(request, "poggers addActor success", HttpStatus.OK);

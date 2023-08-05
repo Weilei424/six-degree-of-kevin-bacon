@@ -1,6 +1,10 @@
 package persistence;
 
 import org.neo4j.driver.v1.types.Path;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.StatementResult;
+
+import exceptions.EntityNotFoundException;
 
 import pojo.Actor;
 
@@ -23,10 +27,21 @@ public class ActorDAOImpl implements ActorDAO {
 	}
 	
 	@Override
-	public Actor getActor(String query) {
-		// TODO Auto-generated method stub
-		
-		return null;
+	public Actor getActor(String query) throws EntityNotFoundException {
+		String id = query.split("=")[1];
+		StatementResult sr = nb.getNode(id, Actor.class);
+		Actor actor = new Actor();
+
+		if (sr.hasNext()) {
+			Record r = sr.next();
+			System.out.println(r);
+			actor.setActorId(r.get("id").asString());
+			actor.setName(r.get("name").asString());
+
+			return actor;
+		} else {
+			throw new EntityNotFoundException();
+		}
 	}
 
 	public void addActor(Actor actor) {
