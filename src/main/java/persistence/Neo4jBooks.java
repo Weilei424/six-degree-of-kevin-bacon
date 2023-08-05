@@ -43,15 +43,17 @@ public class Neo4jBooks {
 	public <T> void addNode(String id, String name, Class<T> c) {
 		
 		try (Session session = driver.session()) {
-			String label = "";
+			String label = "", property = "";;
 			if (c == Movie.class) {
-				label = "m: movie";
+				label = "x:movie";
+				property = "movieId";
 			} else if (c == Actor.class) {
-				label = "a: actor";
+				label = "x:actor";
+				property = "actorId";
 			} else {
 				throw new InvalidRequestException();
 			}
-			String query = String.format("CREATE (%s {id:$i, name:$n})", label);
+			String query = String.format("CREATE (%s {%s:$i, name:$n})", label, property);
             session.writeTransaction(tx -> tx.run(query,
                     parameters("i", id, "n", name)));
 		}
@@ -71,14 +73,16 @@ public class Neo4jBooks {
 				} else {
 					throw new EntityNotFoundException("No such type of record in our database.");
 				}
-				StatementResult sr = tx.run("MATCH ("
-						+ label 
-						+ ")\n"
+				StatementResult sr = tx.run("MATCH (" + label + ")\n"
 						+ "WHERE x." + property + " = $i\n"
 						+ "RETURN x." + property + " AS id, x.name AS name",
 						parameters("i", id)
 						);
-				return sr;
+				if (sr.hasNext()) {
+					return sr;
+				} else {
+					throw new EntityNotFoundException("This Actor has not acted in any movie!");
+				}
 			}
 		}
 	}
@@ -113,22 +117,43 @@ public class Neo4jBooks {
 		}
 	}
 	
-	public int getBaconNumber(String actorId) throws EntityNotFoundException {
-		return bfs(actorId).length() / 2;
+	public boolean hasRelationship(String actorId, String movieId) throws EntityNotFoundException {
+		try (Session session = driver.session()) {
+			try (Transaction tx = session.beginTransaction()) {
+				StatementResult sr = tx.run("MATCH (a:actor {actorId: $x}), (b:movie {movieId: $y})\n"
+						+ "RETURN EXISTS((a)-[:ACTED_IN]->(b)) AS result",
+						parameters( "x", actorId, "y", movieId)
+						);
+				
+				if (sr.hasNext()) {
+					return sr.next().get("result").asBoolean();
+				} else {
+					throw new EntityNotFoundException("Input actorId or movieId is invalid.");
+				}
+			}
+		}
 	}
 	
-	public Path bfs(String actorId) throws EntityNotFoundException {
+	public int getBaconNumber(String actorId) throws EntityNotFoundException {
+		return bfs(actorId).get("path").asPath().length() / 2;
+	}
+	
+	/*/
+	 * Use bfs(actorId).get("actorIds").asList()
+	 * to extract the path as a List, all null items are Movie Nodes purposed to be filtered out.
+	 */
+	public Record bfs(String actorId) throws EntityNotFoundException {
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
 				StatementResult sr = tx.run("MATCH p=shortestPath(\n"
 						+ "(a:actor {actorId: $x})-[*]-(b:actor {actorId: $k})\n"
 						+ ")\n"
-						+ "RETURN p as path", 
+						+ "RETURN p as path, [node in nodes(p) | node.actorId] as actorIds", 
 						parameters( "x", actorId, "k", Constants.KEVIN_BACON_ID)
 						);
 				
 				if (sr.hasNext()) {
-					return sr.next().get("path").asPath();
+					return sr.next();
 				} else {
 					throw new EntityNotFoundException("There does not exist a path from this actor to Kevin Bacon!");
 				}

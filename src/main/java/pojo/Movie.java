@@ -1,11 +1,16 @@
 package pojo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Movie {
 	private String movieId;
 	private String name;
+	private List<String> actors;
 	
 	public Movie() {
 		super();
+		actors = new ArrayList<>();
 	}
 
 	public Movie(String id, String name) {
@@ -13,11 +18,11 @@ public class Movie {
 		this.name = name;
 	}
 
-	public String getId() {
+	public String getMovieId() {
 		return movieId;
 	}
 
-	public void setId(String id) {
+	public void setMovieId(String id) {
 		this.movieId = id;
 	}
 
@@ -27,5 +32,9 @@ public class Movie {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public List<String> getActors() {
+		return actors;
 	}
 }

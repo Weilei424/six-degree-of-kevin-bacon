@@ -13,11 +13,11 @@ public class Actor {
 		this.name = name;
 	}
 
-	public String getId() {
+	public String getActorId() {
 		return actorId;
 	}
 
-	public void setId(String id) {
+	public void setActorId(String id) {
 		this.actorId = id;
 	}
 
