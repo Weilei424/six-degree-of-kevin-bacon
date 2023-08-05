@@ -13,3 +13,6 @@ workbench.xmi
 .settings/
 .vscode/
 .github/
+log.html
+output.xml
+report.html
