@@ -43,6 +43,6 @@ public class MovieDAOImpl implements MovieDAO {
 
 	@Override
 	public void addMovie(Movie movie) {
-		nb.addNode(movie.getId(), movie.getName(), Movie.class);
+		nb.addNode(movie.getMovieId(), movie.getName(), Movie.class);
 	}
 }

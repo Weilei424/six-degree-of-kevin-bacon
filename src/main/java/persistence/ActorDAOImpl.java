@@ -31,7 +31,7 @@ public class ActorDAOImpl implements ActorDAO {
 
 	public void addActor(Actor actor) {
 		// TODO Auto-generated method stub
-		nb.addNode(actor.getId(), actor.getName(), Actor.class);
+		nb.addNode(actor.getActorId(), actor.getName(), Actor.class);
 	}
 
 	@Override
