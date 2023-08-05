@@ -24,7 +24,7 @@ public class MovieStub implements MovieDAO {
 		String id = query.replace("movieId=", "");
 		
 		for (Movie m : list) {
-			if (m.getId().equals(id)) return m;
+			if (m.getMovieId().equals(id)) return m;
 		}
 		throw new EntityNotFoundException("No such ID");
 	}

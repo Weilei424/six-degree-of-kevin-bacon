@@ -34,7 +34,7 @@ public class ActorStub implements ActorDAO {
 		String id = query.replace("actorId=", "");
 		
 		for (Actor a : list) {
-			if (a.getId().equals(id)) return a;
+			if (a.getActorId().equals(id)) return a;
 		}
 		throw new EntityNotFoundException("No such ID");
 	}
