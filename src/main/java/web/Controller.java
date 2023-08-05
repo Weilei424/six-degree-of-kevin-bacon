@@ -88,8 +88,10 @@ public class Controller implements HttpHandler {
 		}
 	}
 
-	private void addActor(HttpExchange request) {
-		
+	private void addActor(HttpExchange request) throws JSONException, IOException {
+		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
+		actorService.addActor(jsonObject);
+		response(request, "poggers addActor success", HttpStatus.OK);
 	}
 
 	private void addMovie(HttpExchange request) throws JSONException {

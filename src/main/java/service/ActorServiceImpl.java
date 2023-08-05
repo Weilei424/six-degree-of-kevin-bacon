@@ -42,7 +42,7 @@ public class ActorServiceImpl implements ActorService {
 	@Override
 	public JSONObject getActor(String query) throws EntityNotFoundException {
 		
-		return new JSONObject(stub.getActor(query));
+		return new JSONObject(actorDAO.getActor(query));
 	}
 
 	@Override
