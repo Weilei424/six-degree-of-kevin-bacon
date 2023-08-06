@@ -5,6 +5,7 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Value;
 
 import exceptions.EntityNotFoundException;
+import pojo.Actor;
 import pojo.Movie;
 
 public class MovieDAOImpl implements MovieDAO {
