@@ -1,8 +1,11 @@
 package pojo;
 
+import java.util.List;
+
 public class Actor {
 	private String actorId;
 	private String name;
+	private List<Movie> movies;
 	
 	public Actor() {
 		super();
@@ -27,6 +30,13 @@ public class Actor {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setMovies(List<Movie> movies) {
+		this.movies = movies;
+	}
+	public void addMovie(Movie movie) {
+		movies.add(movie);
 	}
 	
 }
