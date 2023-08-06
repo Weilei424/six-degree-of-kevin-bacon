@@ -117,7 +117,7 @@ public class Controller implements HttpHandler {
 	    
 	}
 
-	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException {
+	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
 		String query = request.getRequestURI().getQuery();
 		String response = movieService.getMovie(query).toString();
 		response(request, response, HttpStatus.OK);
