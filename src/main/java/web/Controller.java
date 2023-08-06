@@ -95,8 +95,10 @@ public class Controller implements HttpHandler {
 		response(request, "poggers addActor success", HttpStatus.OK);
 	}
 
-	private void addMovie(HttpExchange request) throws JSONException {
-		JSONObject json = JSONObjectParser(request.getRequestBody());
+	private void addMovie(HttpExchange request) throws JSONException, IOException, EntityNotFoundException, InvalidRequestException {
+		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
+		movieService.addMovie(jsonObject);
+		response(request, "addMovie successful", HttpStatus.OK);
 	}
 
 	private void addRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {

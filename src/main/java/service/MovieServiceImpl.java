@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import exceptions.EntityNotFoundException;
+import exceptions.InvalidRequestException;
 import persistence.MovieDAO;
 import persistence.MovieDAOImpl;
 import persistence.MovieStub;
@@ -29,9 +30,19 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public void addMovie(JSONObject jsonObject) throws JSONException {
+		String movieId = jsonObject.getString("movieId");
+		String name = jsonObject.getString("name");
 		Movie movie;
-		movie = new Movie(jsonObject.getString("movieId"), jsonObject.getString("name"));
-		movieDAO.addMovie(movie);
+		movie = new Movie(movieId, name);
+
+		try {
+			getMovie("movieId=" + movieId);
+			throw new InvalidRequestException("movieId already exists");
+		} catch (EntityNotFoundException e) {
+			movieDAO.addMovie(movie);
+		} catch (InvalidRequestException e) {
+			throw e;
+		}
 	}
 
 	@Override
