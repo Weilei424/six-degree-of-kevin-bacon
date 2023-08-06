@@ -1,6 +1,10 @@
 package persistence;
 
 import org.neo4j.driver.v1.types.Path;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 
@@ -29,6 +33,11 @@ public class ActorDAOImpl implements ActorDAO {
 	@Override
 	public Actor getActor(String query) throws EntityNotFoundException {
 		String id = query.split("=")[1];
+		Actor actor = getActorHelper(id);
+		return actor;
+	}
+	
+	public Actor getActorHelper(String id) throws EntityNotFoundException {
 		StatementResult sr = nb.getNode(id, Actor.class);
 		Actor actor = new Actor();
 
@@ -55,14 +64,23 @@ public class ActorDAOImpl implements ActorDAO {
 	}
 
 	@Override
-	public Path getBaconPath(String actorId) {
-		// TODO 
+	public List<Actor> getBaconPath(String actorId) throws EntityNotFoundException {
+		List<Actor> result = new ArrayList<>();
+		
+		//base case: ID was Bacon himself
+		if(actorId == "nm0000102") {
+			result.add(getActorHelper(actorId));
+			return result;
+		}
+		
 		return null;
 	}
 
 	@Override
 	public int getBaconNumber(String actorId) {
-		// TODO 
+		if(actorId == "nm0000102") {
+			return 0;
+		}
 		return 0;
 	}
 	

@@ -1,5 +1,7 @@
 package persistence;
 
+import java.util.List;
+
 import org.neo4j.driver.v1.types.Path;
 
 import exceptions.EntityNotFoundException;
@@ -9,6 +11,6 @@ public interface ActorDAO {
 	Actor getActor(String query) throws EntityNotFoundException;
 	void addActor(Actor actor);
 	void addRelationship(String actorId, String movieId);
-	Path getBaconPath(String actorId);
+	List<Actor> getBaconPath(String actorId) throws EntityNotFoundException;
 	int getBaconNumber(String actorId);
 }
