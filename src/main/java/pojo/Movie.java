@@ -6,7 +6,7 @@ import java.util.List;
 public class Movie {
 	private String movieId;
 	private String name;
-	private List<Actor> actors;
+	private List<String> actors;
 	
 	public Movie() {
 		super();
@@ -34,14 +34,12 @@ public class Movie {
 		this.name = name;
 	}
 	
-	public List<Actor> getActors() {
+	public List<String> getActors() {
 		return actors;
 	}
 	
-	public void setActors(List<Actor> actors) {
+	public void setActors(List<String> actors) {
 		this.actors = actors;
 	}
-	public void addActor(Actor actor) {
-		actors.add(actor);
-	}
+	
 }
