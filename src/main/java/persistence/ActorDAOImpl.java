@@ -2,6 +2,7 @@ package persistence;
 
 import org.neo4j.driver.v1.types.Path;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.neo4j.driver.v1.Record;
@@ -64,14 +65,22 @@ public class ActorDAOImpl implements ActorDAO {
 
 	@Override
 	public List<Actor> getBaconPath(String actorId) throws EntityNotFoundException {
-		Actor actor = getActorHelper(actorId);
+		List<Actor> result = new ArrayList<>();
+		
+		//base case: ID was Bacon himself
+		if(actorId == "nm0000102") {
+			result.add(getActorHelper(actorId));
+			return result;
+		}
 		
 		return null;
 	}
 
 	@Override
 	public int getBaconNumber(String actorId) {
-		// TODO 
+		if(actorId == "nm0000102") {
+			return 0;
+		}
 		return 0;
 	}
 	
