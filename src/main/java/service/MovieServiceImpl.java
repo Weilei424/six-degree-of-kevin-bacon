@@ -1,5 +1,6 @@
 package service;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,11 +17,11 @@ public class MovieServiceImpl implements MovieService {
 	private MovieDAO stub = new MovieStub(); // Using stub db before we have actual db setup
 	private static MovieServiceImpl instance;
 	private MovieDAO movieDAO;
-	
+
 	private MovieServiceImpl() {
 		movieDAO = MovieDAOImpl.getInstance();
 	}
-	
+
 	public static MovieServiceImpl getInstance() {
 		if (instance == null) {
 			instance = new MovieServiceImpl();
@@ -46,7 +47,15 @@ public class MovieServiceImpl implements MovieService {
 	}
 
 	@Override
-	public JSONObject getMovie(String query) throws EntityNotFoundException {
-		return new JSONObject(movieDAO.getMovie(query));
+	public JSONObject getMovie(String query) throws EntityNotFoundException, JSONException {
+		Movie m = movieDAO.getMovie(query);
+		JSONObject movieJson = new JSONObject();
+
+		movieJson.put("movieId", m.getMovieId());
+		movieJson.put("name", m.getName());
+		JSONArray actorArray = new JSONArray(m.getActors());
+		movieJson.put("actors", actorArray);
+
+		return movieJson;
 	}
 }
