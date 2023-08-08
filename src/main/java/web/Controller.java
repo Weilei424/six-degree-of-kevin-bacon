@@ -107,7 +107,7 @@ public class Controller implements HttpHandler {
 		response(request, response, HttpStatus.OK);
 	}
 
-	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException {
+	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
 		 // Get the query parameter from the request URI
 	    String query = request.getRequestURI().getQuery();
 	    // Call the ActorService to get the actor data
