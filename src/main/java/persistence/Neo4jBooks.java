@@ -83,7 +83,7 @@ public class Neo4jBooks {
 				if (sr.hasNext()) {
 					return sr;
 				} else {
-					throw new EntityNotFoundException("This Actor has not acted in any movie!");
+					throw new EntityNotFoundException("This " + label.split(":")[1] + " is not found in our database.");
 				}
 			}
 		}
