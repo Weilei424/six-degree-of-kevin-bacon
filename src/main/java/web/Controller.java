@@ -54,7 +54,7 @@ public class Controller implements HttpHandler {
 				addMovie(request);
 				break;
 			case "addRelationship":
-				addRelationShip(request);
+				addRelationship(request);
 				break;
 			case "getActor":
 				getActor(request);
@@ -102,7 +102,7 @@ public class Controller implements HttpHandler {
 		response(request, "addMovie successful", HttpStatus.OK);
 	}
 
-	private void addRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
+	private void addRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
 		JSONObject json = JSONObjectParser(request.getRequestBody());
 		String response = actorService.addRelationship(json);
 		response(request, response, HttpStatus.OK);
@@ -120,7 +120,6 @@ public class Controller implements HttpHandler {
 
 	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
 		String query = request.getRequestURI().getRawQuery();
-		System.out.println(query);
 		String response = movieService.getMovie(query).toString();
 		response(request, response, HttpStatus.OK);
 	}
