@@ -32,8 +32,7 @@ public class ActorDAOImpl implements ActorDAO {
 	
 	@Override
 	public Actor getActor(String query) throws EntityNotFoundException {
-		String id = query.split("=")[1];
-		Actor actor = getActorHelper(id);
+		Actor actor = getActorHelper(query);
 		return actor;
 	}
 	
@@ -43,7 +42,6 @@ public class ActorDAOImpl implements ActorDAO {
 
 		if (sr.hasNext()) {
 			Record r = sr.next();
-			System.out.println(r);
 			actor.setActorId(r.get("id").asString());
 			actor.setName(r.get("name").asString());
 

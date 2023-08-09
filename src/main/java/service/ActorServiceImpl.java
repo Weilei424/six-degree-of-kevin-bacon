@@ -51,7 +51,11 @@ public class ActorServiceImpl implements ActorService {
 	}
 
 	@Override
-	public JSONObject getActor(String query) throws EntityNotFoundException {
+	public JSONObject getActor(String query) throws EntityNotFoundException, JSONException {
+		String endpoint = query.split("=")[0];
+		if (!endpoint.equals("actorId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
+		
 		return new JSONObject(actorDAO.getActor(query));
 	}
 
