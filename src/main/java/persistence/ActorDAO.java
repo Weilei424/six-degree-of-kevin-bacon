@@ -12,5 +12,5 @@ public interface ActorDAO {
 	void addActor(Actor actor);
 	void addRelationship(String actorId, String movieId);
 	List<Actor> getBaconPath(String actorId) throws EntityNotFoundException;
-	int getBaconNumber(String actorId);
+	int getBaconNumber(String actorId) throws EntityNotFoundException;
 }

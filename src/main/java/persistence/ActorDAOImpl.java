@@ -5,6 +5,13 @@ import org.neo4j.driver.v1.types.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Queue;
+import java.util.LinkedList;
+
+import java.util.Set;
+import java.util.Stack;
+import java.util.LinkedHashSet;
+
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 
@@ -64,22 +71,43 @@ public class ActorDAOImpl implements ActorDAO {
 	@Override
 	public List<Actor> getBaconPath(String actorId) throws EntityNotFoundException {
 		List<Actor> result = new ArrayList<>();
+		Queue<String> queue = new LinkedList<>();
+		List<String> visited = new LinkedList<>();
 		
-		//base case: ID was Bacon himself
-		if(actorId == "nm0000102") {
-			result.add(getActorHelper(actorId));
-			return result;
+		visited.add(actorId);
+		queue.add(actorId);
+		
+		while(!queue.isEmpty()) {
+			String a = queue.remove();
+			
+			if(a.equals("nm0000102")) {
+				result.add(getActorHelper(a));
+				return result;
+			}
+			
+			List<String> adjacentActors = new LinkedList<>();
+			//get movies v acted in
+			//get actors (actorid) from those movies
+			//these are adjacent actors
+			
+			for(String v : adjacentActors) {
+				if(!visited.contains(v)) {
+					visited.add(v);
+					queue.add(v);
+				}
+			}
 		}
 		
 		return null;
 	}
 
 	@Override
-	public int getBaconNumber(String actorId) {
-		if(actorId == "nm0000102") {
+	public int getBaconNumber(String actorId) throws EntityNotFoundException {
+		if(actorId.equals("nm0000102")) {
 			return 0;
+		}else {
+			return getBaconPath(actorId).size();
 		}
-		return 0;
 	}
 	
 	
