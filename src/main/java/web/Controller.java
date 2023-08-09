@@ -63,7 +63,7 @@ public class Controller implements HttpHandler {
 				getMovie(request);
 				break;
 			case "hasRelationship":
-				hasRelationShip(request);
+				hasRelationship(request);
 				break;
 			case "computeBaconNumber":
 				computeBaconNumber(request);
@@ -76,7 +76,6 @@ public class Controller implements HttpHandler {
 			}
 		} catch (InvalidRequestException e) {
 			e.printStackTrace();
-			System.out.println("hello");
 			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -130,18 +129,11 @@ public class Controller implements HttpHandler {
 		response(request, response, HttpStatus.OK);
 	}
 
-	private void hasRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
+	private void hasRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
 	    // Parse the JSON request body to get the movieId and actorId
 	    JSONObject json = JSONObjectParser(request.getRequestBody());
-	    boolean hasRelationship = actorService.hasRelationship(json);
-	    String bool;
-	    if (hasRelationship) {
-	    	bool = "";
-	    } else {
-	    	bool = "NOT";
-	    }
-	    String responseMsg = "This actor has " + bool + " acted in this movie";
-	    response(request, "", HttpStatus.OK);
+	    String response = actorService.hasRelationship(json).toString();
+	    response(request, response, HttpStatus.OK);
 
 	}
 

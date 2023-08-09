@@ -56,8 +56,16 @@ public class ActorServiceImpl implements ActorService {
 	}
 
 	@Override
-	public boolean hasRelationship(JSONObject jsonObject) throws EntityNotFoundException, JSONException {
-		return actorDAO.hasRelationship(jsonObject.getString("actorId"), jsonObject.getString("movieId"));
+	public JSONObject hasRelationship(JSONObject jsonObject) throws EntityNotFoundException, JSONException {
+		JSONObject responseJson = new JSONObject();
+		String actorId = jsonObject.getString("actorId");
+		String movieId = jsonObject.getString("movieId");
+		actorDAO.getActor(actorId);
+		movieDAO.getMovie(movieId);
+		responseJson.put("actorId", actorId);
+		responseJson.put("movieId", movieId);
+		responseJson.put("hasRelationship", actorDAO.hasRelationship(actorId, movieId));
+		return responseJson;
 	}
 	
 	@Override
