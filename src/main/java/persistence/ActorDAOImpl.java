@@ -62,8 +62,12 @@ public class ActorDAOImpl implements ActorDAO {
 	}
 
 	public void addActor(Actor actor) {
-		// TODO Auto-generated method stub
 		nb.addNode(actor.getActorId(), actor.getName(), Actor.class);
+	}
+	
+	@Override
+	public boolean hasRelationship(String actorId, String movieId) throws EntityNotFoundException {
+		return nb.hasRelationship(actorId, movieId);
 	}
 
 	@Override

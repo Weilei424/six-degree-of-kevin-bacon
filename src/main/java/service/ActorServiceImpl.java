@@ -41,7 +41,7 @@ public class ActorServiceImpl implements ActorService {
 		actor = new Actor(actorId, name);
 
 		try {
-			getActor("actorId=" + actorId);
+			getActor(actorId);
 			throw new InvalidRequestException("actorId already exists");
 		} catch (EntityNotFoundException e) {
 			actorDAO.addActor(actor);
@@ -52,10 +52,14 @@ public class ActorServiceImpl implements ActorService {
 
 	@Override
 	public JSONObject getActor(String query) throws EntityNotFoundException, JSONException {
-		
 		return new JSONObject(actorDAO.getActor(query));
 	}
 
+	@Override
+	public boolean hasRelationship(JSONObject jsonObject) throws EntityNotFoundException, JSONException {
+		return actorDAO.hasRelationship(jsonObject.getString("actorId"), jsonObject.getString("movieId"));
+	}
+	
 	@Override
 	public String addRelationship(JSONObject jsonObject) throws JSONException, EntityNotFoundException {
 		String movieId = jsonObject.getString("movieId");

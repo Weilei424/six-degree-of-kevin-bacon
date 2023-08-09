@@ -133,25 +133,16 @@ public class Controller implements HttpHandler {
 	private void hasRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
 	    // Parse the JSON request body to get the movieId and actorId
 	    JSONObject json = JSONObjectParser(request.getRequestBody());
-	    String movieId = json.getString("movieId");
-	    String actorId = json.getString("actorId");
-
-	    try {
-	    	// Check if the relationship exists using the Neo4jBooks class
-	        boolean hasRelationship = Neo4jBooks.getInstance().hasRelationship(actorId, movieId);
-
-	        // Construct the response message
-	        String responseMsg = hasRelationship ? "Relationship exists" : "Relationship does not exist";
-
-	        // Send the response back to the client
-	        response(request, responseMsg, HttpStatus.OK);
-	    } catch (EntityNotFoundException e) {
-	        // If the actor or movie is not found, send an error response
-	        response(request, e.getMessage(), HttpStatus.NOT_FOUND);
-	    } catch (Exception e) {
-	        // Handle other exceptions with an error response
-	        response(request, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    boolean hasRelationship = actorService.hasRelationship(json);
+	    String bool;
+	    if (hasRelationship) {
+	    	bool = "";
+	    } else {
+	    	bool = "NOT";
 	    }
+	    String responseMsg = "This actor has " + bool + " acted in this movie";
+	    response(request, "", HttpStatus.OK);
+
 	}
 
 	private void computeBaconNumber(HttpExchange request) {

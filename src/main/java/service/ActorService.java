@@ -12,4 +12,5 @@ public interface ActorService {
 	String addRelationship(JSONObject jsonObject) throws JSONException, EntityNotFoundException;
 	JSONObject getBaconPath(String actorId);
 	int getBaconNumber(String actorId);
+	boolean hasRelationship(JSONObject jsonObject) throws EntityNotFoundException, JSONException;
 }

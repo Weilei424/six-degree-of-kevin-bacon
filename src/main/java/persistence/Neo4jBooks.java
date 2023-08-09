@@ -130,7 +130,7 @@ public class Neo4jBooks {
 				if (sr.hasNext()) {
 					return sr.next().get("result").asBoolean();
 				} else {
-					throw new EntityNotFoundException("Input actorId or movieId is invalid.");
+					throw new EntityNotFoundException("No such relationship.");
 				}
 			}
 		}
