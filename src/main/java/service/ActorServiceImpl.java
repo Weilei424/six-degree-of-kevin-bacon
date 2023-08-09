@@ -80,7 +80,7 @@ public class ActorServiceImpl implements ActorService {
 		}
 		actorDAO.addRelationship(actorId, movieId);
 		
-		return "relastionship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
+		return "relationship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
 	}
 
 	@Override

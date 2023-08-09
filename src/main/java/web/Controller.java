@@ -99,6 +99,7 @@ public class Controller implements HttpHandler {
 		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
 		movieService.addMovie(jsonObject);
 		response(request, "addMovie successful", HttpStatus.OK);
+
 	}
 
 	private void addRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
