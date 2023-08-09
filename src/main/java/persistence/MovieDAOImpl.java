@@ -27,8 +27,7 @@ public class MovieDAOImpl implements MovieDAO {
 	
 	@Override
 	public Movie getMovie(String query) throws EntityNotFoundException {
-		String id = query.split("=")[1];
-		StatementResult sr = nb.getNode(id, Movie.class);
+		StatementResult sr = nb.getNode(query, Movie.class);
 		Movie movie = new Movie();
 		
 		if (sr.hasNext()) {
