@@ -7,5 +7,5 @@ import exceptions.EntityNotFoundException;
 
 public interface MovieService {
 	void addMovie(JSONObject jsonObject) throws JSONException;;
-	JSONObject getMovie(String query) throws EntityNotFoundException;
+	JSONObject getMovie(String query) throws EntityNotFoundException, JSONException;
 }

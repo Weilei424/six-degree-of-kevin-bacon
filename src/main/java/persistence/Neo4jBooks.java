@@ -43,17 +43,18 @@ public class Neo4jBooks {
 	public <T> void addNode(String id, String name, Class<T> c) {
 		
 		try (Session session = driver.session()) {
-			String label = "", property = "";;
+			String label = "", property = "", actorsList = "";
 			if (c == Movie.class) {
 				label = "x:movie";
 				property = "movieId";
+				actorsList = ", actors:[]";
 			} else if (c == Actor.class) {
 				label = "x:actor";
 				property = "actorId";
 			} else {
 				throw new InvalidRequestException();
 			}
-			String query = String.format("CREATE (%s {%s:$i, name:$n})", label, property);
+			String query = String.format("CREATE (%s {%s:$i, name:$n%s})", label, property, actorsList);
             session.writeTransaction(tx -> tx.run(query,
                     parameters("i", id, "n", name)));
 		}
@@ -63,10 +64,11 @@ public class Neo4jBooks {
 		
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
-				String label = "", property = "";
+				String label = "", property = "", actorList = "";
 				if (c == Movie.class) {
 					label = "x:movie";
 					property = "movieId";
+					actorList = ", x.actors AS actors";
 				} else if (c == Actor.class) {
 					label = "x:actor";
 					property = "actorId";
@@ -75,13 +77,13 @@ public class Neo4jBooks {
 				}
 				StatementResult sr = tx.run("MATCH (" + label + ")\n"
 						+ "WHERE x." + property + " = $i\n"
-						+ "RETURN x." + property + " AS id, x.name AS name",
+						+ "RETURN x." + property + " AS id, x.name AS name" + actorList,
 						parameters("i", id)
 						);
 				if (sr.hasNext()) {
 					return sr;
 				} else {
-					throw new EntityNotFoundException("This Actor has not acted in any movie!");
+					throw new EntityNotFoundException("This " + label.split(":")[1] + " is not found in our database.");
 				}
 			}
 		}
@@ -108,9 +110,9 @@ public class Neo4jBooks {
 	
 	public void addRelationship(String actorId, String movieId) {
 		try (Session session = driver.session()) {
-			session.writeTransaction(tx -> tx.run("MATCH (a:actor), (m:movie)\n"
-						+ "WHERE a.actorId = $x AND m.movieId = $y\n"
-						+ "CREATE (a)-[r:ACTED_IN]->(m)\n"
+			session.writeTransaction(tx -> tx.run("MATCH (a:actor {actorId: $x}), (b:movie {movieId: $y})\n"
+						+ "CREATE (a)-[r:ACTED_IN]->(b)\n"
+						+ "SET b.actors = b.actors +  a.actorId\n"
 						+ "RETURN type(r)",
 						parameters("x", actorId, "y", movieId)
 						));
@@ -139,8 +141,8 @@ public class Neo4jBooks {
 	}
 	
 	/*/
-	 * Use bfs(actorId).get("actorIds").asList()
-	 * to extract the path as a List, all null items are Movie Nodes purposed to be filtered out.
+	 * Use bfs(actorId).get("idList").asList()
+	 * to extract the path as a List, the list contains
 	 */
 	public Record bfs(String actorId) throws EntityNotFoundException {
 		try (Session session = driver.session()) {
@@ -148,10 +150,15 @@ public class Neo4jBooks {
 				StatementResult sr = tx.run("MATCH p=shortestPath(\n"
 						+ "(a:actor {actorId: $x})-[*]-(b:actor {actorId: $k})\n"
 						+ ")\n"
-						+ "RETURN p as path, [node in nodes(p) | node.actorId] as actorIds", 
+						+ "RETURN p as path, [node in nodes(p) |\n"
+						+ "          CASE\n"
+						+ "             WHEN 'actor' IN labels(node) THEN node.actorId\n"
+						+ "             WHEN 'movie' IN labels(node) THEN node.movieId\n"
+						+ "             ELSE null\n"
+						+ "          END\n"
+						+ "       ] AS idList",
 						parameters( "x", actorId, "k", Constants.KEVIN_BACON_ID)
 						);
-				
 				if (sr.hasNext()) {
 					return sr.next();
 				} else {

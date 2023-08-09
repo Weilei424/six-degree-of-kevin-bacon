@@ -2,6 +2,7 @@ package persistence;
 
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Value;
 
 import exceptions.EntityNotFoundException;
 import pojo.Actor;
@@ -26,15 +27,14 @@ public class MovieDAOImpl implements MovieDAO {
 	
 	@Override
 	public Movie getMovie(String query) throws EntityNotFoundException {
-		String id = query.split("=")[1];
-		StatementResult sr = nb.getNode(id, Movie.class);
+		StatementResult sr = nb.getNode(query, Movie.class);
 		Movie movie = new Movie();
 		
 		if (sr.hasNext()) {
 			Record r = sr.next();
 			movie.setMovieId(r.get("id").asString());
 			movie.setName(r.get("name").asString());
-
+			movie.setActors(r.get("actors").asList(Value::asString));
 			return movie;
 		} else {
 			throw new EntityNotFoundException();

@@ -18,6 +18,7 @@ import ca.yorku.eecs.Utils;
 import constants.HttpStatus;
 import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
+import persistence.Neo4jBooks;
 import service.*;
 
 public class Controller implements HttpHandler {
@@ -53,7 +54,7 @@ public class Controller implements HttpHandler {
 				addMovie(request);
 				break;
 			case "addRelationship":
-				addRelationShip(request);
+				addRelationship(request);
 				break;
 			case "getActor":
 				getActor(request);
@@ -95,21 +96,24 @@ public class Controller implements HttpHandler {
 		response(request, "poggers addActor success", HttpStatus.OK);
 	}
 
-	private void addMovie(HttpExchange request) throws JSONException, IOException {
+	private void addMovie(HttpExchange request) throws JSONException, IOException, EntityNotFoundException, InvalidRequestException {
 		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
 		movieService.addMovie(jsonObject);
-		response(request, "addMovie success", HttpStatus.OK);
+		response(request, "addMovie successful", HttpStatus.OK);
 	}
 
-	private void addRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
+	private void addRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
 		JSONObject json = JSONObjectParser(request.getRequestBody());
 		String response = actorService.addRelationship(json);
 		response(request, response, HttpStatus.OK);
 	}
 
-	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException {
+	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
 		 // Get the query parameter from the request URI
-	    String query = request.getRequestURI().getQuery();
+	    String query = request.getRequestURI().getRawQuery();
+	    String endpoint = query.split("=")[0];
+		if (!endpoint.equals("actorId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
 	    // Call the ActorService to get the actor data
 	    String response = actorService.getActor(query).toString();
 	    // Set the response headers and send the response to the client by using helper method
@@ -117,14 +121,37 @@ public class Controller implements HttpHandler {
 	    
 	}
 
-	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException {
-		String query = request.getRequestURI().getQuery();
+	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
+		String query = request.getRequestURI().getRawQuery();
+		String endpoint = query.split("=")[0];
+		if (!endpoint.equals("movieId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
 		String response = movieService.getMovie(query).toString();
 		response(request, response, HttpStatus.OK);
 	}
 
-	private void hasRelationShip(HttpExchange request) {
+	private void hasRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
+	    // Parse the JSON request body to get the movieId and actorId
+	    JSONObject json = JSONObjectParser(request.getRequestBody());
+	    String movieId = json.getString("movieId");
+	    String actorId = json.getString("actorId");
 
+	    try {
+	    	// Check if the relationship exists using the Neo4jBooks class
+	        boolean hasRelationship = Neo4jBooks.getInstance().hasRelationship(actorId, movieId);
+
+	        // Construct the response message
+	        String responseMsg = hasRelationship ? "Relationship exists" : "Relationship does not exist";
+
+	        // Send the response back to the client
+	        response(request, responseMsg, HttpStatus.OK);
+	    } catch (EntityNotFoundException e) {
+	        // If the actor or movie is not found, send an error response
+	        response(request, e.getMessage(), HttpStatus.NOT_FOUND);
+	    } catch (Exception e) {
+	        // Handle other exceptions with an error response
+	        response(request, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
 
 	private void computeBaconNumber(HttpExchange request) {
@@ -145,6 +172,7 @@ public class Controller implements HttpHandler {
 	private JSONObject JSONObjectParser(InputStream requestBody) throws JSONException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
 		String jsonString = reader.lines().collect(Collectors.joining());
+		System.out.println(jsonString);
 		JSONObject jsonObject = new JSONObject(jsonString);
 		
 		return jsonObject;
