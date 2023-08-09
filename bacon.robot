@@ -15,8 +15,13 @@ ${hasRelationship}    /hasRelationship
 ${computeBaconNumber}    /computeBaconNumber
 ${computeBaconPath}    /computeBaconPath
 ${newFeature}
-${KevinBacon}       nm1001231
+${KevinBaconId}       nm1001231
+${KevinBacon}    Kevin Bacon
+${A01}    0001
+${A23}    0023
 ${M1}    0001
+${M9}    0009
+${M12}    0012
 ${fakeMovieId}    9000
 ${fakeMovieName}    nOsucHmoviE
 ${fakeActorId}    9876
@@ -26,8 +31,29 @@ ${fakeActorName}    Void
 # addActorFail
 # addMoviePass
 # addMovieFail
-# addRelationshipPass
-# addRelationshipFail
+addRelationshipPass
+    ${headers}=    Create Dictionary    Content-Type=application/json
+    ${params}=    Create Dictionary    actorId=${A23}    movieId=${M12}
+    ${params_json}=    Convert To String    ${params}
+    ${resp}=    PUT On Session    localhost    ${addRelationship}     data=${params_json}    headers=${headers}
+    Should Be Equal As Strings    ${resp.status_code}    200
+addRelationshipFail
+    ${headers}=    Create Dictionary    Content-Type=application/json
+    ${params1}=    Create Dictionary    actorId=${fakeActorId}    movieId=${M12}
+    ${params_json1}=    Convert To String    ${params1}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${addRelationship}    data=${params_json1}    headers=${headers}
+
+    ${params2}=    Create Dictionary    actorId=${A23}    movieId=${fakeMovieId}
+    ${params_json2}=    Convert To String    ${params2}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${addRelationship}    data=${params_json2}    headers=${headers}
+
+    ${params3}=    Create Dictionary    actorId=${A23}    movieId=${M12}
+    ${params_json3}=    Convert To String    ${params3}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    /addRELATIONSHIP    data=${params_json3}    headers=${headers}
+
+    # ${params4}=    Create Dictionary    actorIdd=${A23}    movieId=${M12}
+    # ${params_json4}=    Convert To String    ${params4}
+    # Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json3}    headers=${headers}
 # getActorPass
 # getActorFail
 getMoviePass
