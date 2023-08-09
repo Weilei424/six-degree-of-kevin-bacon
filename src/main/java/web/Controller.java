@@ -111,6 +111,9 @@ public class Controller implements HttpHandler {
 	private void getActor(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
 		 // Get the query parameter from the request URI
 	    String query = request.getRequestURI().getRawQuery();
+	    String endpoint = query.split("=")[0];
+		if (!endpoint.equals("actorId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
 	    // Call the ActorService to get the actor data
 	    String response = actorService.getActor(query).toString();
 	    // Set the response headers and send the response to the client by using helper method
@@ -120,6 +123,9 @@ public class Controller implements HttpHandler {
 
 	private void getMovie(HttpExchange request) throws IOException, EntityNotFoundException, JSONException {
 		String query = request.getRequestURI().getRawQuery();
+		String endpoint = query.split("=")[0];
+		if (!endpoint.equals("movieId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
 		String response = movieService.getMovie(query).toString();
 		response(request, response, HttpStatus.OK);
 	}
@@ -166,6 +172,7 @@ public class Controller implements HttpHandler {
 	private JSONObject JSONObjectParser(InputStream requestBody) throws JSONException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
 		String jsonString = reader.lines().collect(Collectors.joining());
+		System.out.println(jsonString);
 		JSONObject jsonObject = new JSONObject(jsonString);
 		
 		return jsonObject;

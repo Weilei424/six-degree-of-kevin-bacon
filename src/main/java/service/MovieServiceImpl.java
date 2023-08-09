@@ -48,9 +48,6 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public JSONObject getMovie(String query) throws EntityNotFoundException, JSONException {
-		String endpoint = query.split("=")[0];
-		if (!endpoint.equals("movieId")) throw new JSONException("Invalid path");
-		query = query.split("=")[1];
 		Movie m = movieDAO.getMovie(query);
 		JSONObject movieJson = new JSONObject();
 

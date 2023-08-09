@@ -52,9 +52,6 @@ public class ActorServiceImpl implements ActorService {
 
 	@Override
 	public JSONObject getActor(String query) throws EntityNotFoundException, JSONException {
-		String endpoint = query.split("=")[0];
-		if (!endpoint.equals("actorId")) throw new JSONException("Invalid path");
-		query = query.split("=")[1];
 		
 		return new JSONObject(actorDAO.getActor(query));
 	}
@@ -64,8 +61,8 @@ public class ActorServiceImpl implements ActorService {
 		String movieId = jsonObject.getString("movieId");
 		String actorId = jsonObject.getString("actorId");
 		
-		//getActor(actorId);
-		//movieDAO.getMovie(movieId);
+		getActor(actorId);
+		movieDAO.getMovie(movieId);
 		actorDAO.addRelationship(actorId, movieId);
 		
 		return "relastionship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
