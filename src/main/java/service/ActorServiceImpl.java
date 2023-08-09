@@ -41,7 +41,7 @@ public class ActorServiceImpl implements ActorService {
 		actor = new Actor(actorId, name);
 
 		try {
-			getActor("actorId=" + actorId);
+			getActor(actorId);
 			throw new InvalidRequestException("actorId already exists");
 		} catch (EntityNotFoundException e) {
 			actorDAO.addActor(actor);
@@ -52,10 +52,22 @@ public class ActorServiceImpl implements ActorService {
 
 	@Override
 	public JSONObject getActor(String query) throws EntityNotFoundException, JSONException {
-		
 		return new JSONObject(actorDAO.getActor(query));
 	}
 
+	@Override
+	public JSONObject hasRelationship(JSONObject jsonObject) throws EntityNotFoundException, JSONException {
+		JSONObject responseJson = new JSONObject();
+		String actorId = jsonObject.getString("actorId");
+		String movieId = jsonObject.getString("movieId");
+		actorDAO.getActor(actorId);
+		movieDAO.getMovie(movieId);
+		responseJson.put("actorId", actorId);
+		responseJson.put("movieId", movieId);
+		responseJson.put("hasRelationship", actorDAO.hasRelationship(actorId, movieId));
+		return responseJson;
+	}
+	
 	@Override
 	public String addRelationship(JSONObject jsonObject) throws JSONException, EntityNotFoundException {
 		String movieId = jsonObject.getString("movieId");
@@ -63,6 +75,9 @@ public class ActorServiceImpl implements ActorService {
 		
 		getActor(actorId);
 		movieDAO.getMovie(movieId);
+		if (actorDAO.hasRelationship(actorId, movieId)) {
+			throw new InvalidRequestException("This relationship already exists.");
+		}
 		actorDAO.addRelationship(actorId, movieId);
 		
 		return "relationship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";

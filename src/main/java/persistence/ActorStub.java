@@ -62,4 +62,10 @@ public class ActorStub implements ActorDAO {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public boolean hasRelationship(String actorId, String movieId) throws EntityNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

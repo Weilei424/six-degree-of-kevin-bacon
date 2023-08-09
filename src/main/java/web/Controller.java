@@ -63,7 +63,7 @@ public class Controller implements HttpHandler {
 				getMovie(request);
 				break;
 			case "hasRelationship":
-				hasRelationShip(request);
+				hasRelationship(request);
 				break;
 			case "computeBaconNumber":
 				computeBaconNumber(request);
@@ -76,7 +76,6 @@ public class Controller implements HttpHandler {
 			}
 		} catch (InvalidRequestException e) {
 			e.printStackTrace();
-			System.out.println("hello");
 			response(request, e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -100,6 +99,7 @@ public class Controller implements HttpHandler {
 		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
 		movieService.addMovie(jsonObject);
 		response(request, "addMovie successful", HttpStatus.OK);
+
 	}
 
 	private void addRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
@@ -130,28 +130,12 @@ public class Controller implements HttpHandler {
 		response(request, response, HttpStatus.OK);
 	}
 
-	private void hasRelationShip(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
+	private void hasRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
 	    // Parse the JSON request body to get the movieId and actorId
 	    JSONObject json = JSONObjectParser(request.getRequestBody());
-	    String movieId = json.getString("movieId");
-	    String actorId = json.getString("actorId");
+	    String response = actorService.hasRelationship(json).toString();
+	    response(request, response, HttpStatus.OK);
 
-	    try {
-	    	// Check if the relationship exists using the Neo4jBooks class
-	        boolean hasRelationship = Neo4jBooks.getInstance().hasRelationship(actorId, movieId);
-
-	        // Construct the response message
-	        String responseMsg = hasRelationship ? "Relationship exists" : "Relationship does not exist";
-
-	        // Send the response back to the client
-	        response(request, responseMsg, HttpStatus.OK);
-	    } catch (EntityNotFoundException e) {
-	        // If the actor or movie is not found, send an error response
-	        response(request, e.getMessage(), HttpStatus.NOT_FOUND);
-	    } catch (Exception e) {
-	        // Handle other exceptions with an error response
-	        response(request, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
 	}
 
 	private void computeBaconNumber(HttpExchange request) {
@@ -172,7 +156,6 @@ public class Controller implements HttpHandler {
 	private JSONObject JSONObjectParser(InputStream requestBody) throws JSONException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
 		String jsonString = reader.lines().collect(Collectors.joining());
-		System.out.println(jsonString);
 		JSONObject jsonObject = new JSONObject(jsonString);
 		
 		return jsonObject;

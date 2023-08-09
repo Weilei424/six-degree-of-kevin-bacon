@@ -37,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
 		movie = new Movie(movieId, name);
 
 		try {
-			getMovie("movieId=" + movieId);
+			getMovie(movieId);
 			throw new InvalidRequestException("movieId already exists");
 		} catch (EntityNotFoundException e) {
 			movieDAO.addMovie(movie);
