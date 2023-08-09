@@ -64,7 +64,7 @@ public class ActorServiceImpl implements ActorService {
 		//movieDAO.getMovie(movieId);
 		actorDAO.addRelationship(actorId, movieId);
 		
-		return "relastionship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
+		return "relationship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";
 	}
 
 	@Override
