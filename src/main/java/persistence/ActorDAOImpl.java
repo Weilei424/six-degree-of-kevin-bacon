@@ -73,54 +73,12 @@ public class ActorDAOImpl implements ActorDAO {
 
 	@Override
 	public List<Actor> getBaconPath(String actorId) throws EntityNotFoundException {
-		List<Actor> result = new ArrayList<>();
-		Queue<String> queue = new LinkedList<>();
-		Map<String, String> parentage = new HashMap<>();
-		List<String> visited = new LinkedList<>();
-		
-		visited.add(actorId);
-		queue.add(actorId);
-		String a = actorId;
-		
-		
-		while(!queue.isEmpty()) {
-			a = queue.remove();
-			
-			if(a.equals(Constants.KEVIN_BACON_ID)) {
-				break;
-			}
-			
-			List<String> adjacentActors = new LinkedList<>();
-			//get movies v acted in
-			//get actors (actorid) from those movies
-			//these are adjacent actors
-			
-			for(String v : adjacentActors) {
-				if(!visited.contains(v)) {
-					visited.add(v);
-					parentage.put(v, a);
-					queue.add(v);
-				}
-			}
-		}
-		
-		while(!a.equals(actorId)) {
-			result.add(getActorHelper(a));
-			a = parentage.get(a);
-		}
-		result.add(getActorHelper(a));
-		Collections.reverse(result);
-		
-		return result;
+		return null;
 	}
 
 	@Override
 	public int getBaconNumber(String actorId) throws EntityNotFoundException {
-		if(actorId.equals(Constants.KEVIN_BACON_ID)) {
-			return 0;
-		}else {
-			return getBaconPath(actorId).size();
-		}
+		return nb.getBaconNumber(actorId);
 	}
 	
 	
