@@ -141,8 +141,8 @@ public class Neo4jBooks {
 	}
 	
 	/*/
-	 * Use bfs(actorId).get("actorIds").asList()
-	 * to extract the path as a List, all null items are Movie Nodes purposed to be filtered out.
+	 * Use bfs(actorId).get("idList").asList()
+	 * to extract the path as a List, the list contains
 	 */
 	public Record bfs(String actorId) throws EntityNotFoundException {
 		try (Session session = driver.session()) {
@@ -150,10 +150,15 @@ public class Neo4jBooks {
 				StatementResult sr = tx.run("MATCH p=shortestPath(\n"
 						+ "(a:actor {actorId: $x})-[*]-(b:actor {actorId: $k})\n"
 						+ ")\n"
-						+ "RETURN p as path, [node in nodes(p) | node.actorId] as actorIds", 
+						+ "RETURN p as path, [node in nodes(p) |\n"
+						+ "          CASE\n"
+						+ "             WHEN 'actor' IN labels(node) THEN node.actorId\n"
+						+ "             WHEN 'movie' IN labels(node) THEN node.movieId\n"
+						+ "             ELSE null\n"
+						+ "          END\n"
+						+ "       ] AS idList",
 						parameters( "x", actorId, "k", Constants.KEVIN_BACON_ID)
 						);
-				
 				if (sr.hasNext()) {
 					return sr.next();
 				} else {
