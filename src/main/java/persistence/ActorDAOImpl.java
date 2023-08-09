@@ -2,15 +2,18 @@ package persistence;
 
 import org.neo4j.driver.v1.types.Path;
 
+import constants.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Queue;
 import java.util.LinkedList;
 
-import java.util.Set;
-import java.util.Stack;
-import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.HashMap;
+
+import java.util.Collections;
 
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
@@ -72,17 +75,19 @@ public class ActorDAOImpl implements ActorDAO {
 	public List<Actor> getBaconPath(String actorId) throws EntityNotFoundException {
 		List<Actor> result = new ArrayList<>();
 		Queue<String> queue = new LinkedList<>();
+		Map<String, String> parentage = new HashMap<>();
 		List<String> visited = new LinkedList<>();
 		
 		visited.add(actorId);
 		queue.add(actorId);
+		String a = actorId;
+		
 		
 		while(!queue.isEmpty()) {
-			String a = queue.remove();
+			a = queue.remove();
 			
-			if(a.equals("nm0000102")) {
-				result.add(getActorHelper(a));
-				return result;
+			if(a.equals(Constants.KEVIN_BACON_ID)) {
+				break;
 			}
 			
 			List<String> adjacentActors = new LinkedList<>();
@@ -93,17 +98,25 @@ public class ActorDAOImpl implements ActorDAO {
 			for(String v : adjacentActors) {
 				if(!visited.contains(v)) {
 					visited.add(v);
+					parentage.put(v, a);
 					queue.add(v);
 				}
 			}
 		}
 		
-		return null;
+		while(!a.equals(actorId)) {
+			result.add(getActorHelper(a));
+			a = parentage.get(a);
+		}
+		result.add(getActorHelper(a));
+		Collections.reverse(result);
+		
+		return result;
 	}
 
 	@Override
 	public int getBaconNumber(String actorId) throws EntityNotFoundException {
-		if(actorId.equals("nm0000102")) {
+		if(actorId.equals(Constants.KEVIN_BACON_ID)) {
 			return 0;
 		}else {
 			return getBaconPath(actorId).size();
