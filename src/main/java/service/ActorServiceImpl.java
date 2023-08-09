@@ -75,6 +75,9 @@ public class ActorServiceImpl implements ActorService {
 		
 		getActor(actorId);
 		movieDAO.getMovie(movieId);
+		if (actorDAO.hasRelationship(actorId, movieId)) {
+			throw new InvalidRequestException("This relationship already exists.");
+		}
 		actorDAO.addRelationship(actorId, movieId);
 		
 		return "relastionship actor:" + actorId + " ->" + " movie:" + movieId + " has been added.";

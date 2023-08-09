@@ -155,7 +155,6 @@ public class Controller implements HttpHandler {
 	private JSONObject JSONObjectParser(InputStream requestBody) throws JSONException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
 		String jsonString = reader.lines().collect(Collectors.joining());
-		System.out.println(jsonString);
 		JSONObject jsonObject = new JSONObject(jsonString);
 		
 		return jsonObject;

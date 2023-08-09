@@ -71,7 +71,8 @@ public class ActorDAOImpl implements ActorDAO {
 	}
 
 	@Override
-	public void addRelationship(String actorId, String movieId) {
+	public void addRelationship(String actorId, String movieId) throws EntityNotFoundException {
+		nb.hasRelationship(actorId, movieId);
 		nb.addRelationship(actorId, movieId);
 	}
 
