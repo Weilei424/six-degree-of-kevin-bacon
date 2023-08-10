@@ -1,10 +1,13 @@
 package service;
 
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import pojo.Actor;
-
+import pojo.Movie;
 import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
 import persistence.ActorDAO;
@@ -52,7 +55,15 @@ public class ActorServiceImpl implements ActorService {
 
 	@Override
 	public JSONObject getActor(String query) throws EntityNotFoundException, JSONException {
-		return new JSONObject(actorDAO.getActor(query));
+		Actor a = actorDAO.getActor(query);
+		JSONObject actorJson = new JSONObject();
+
+		actorJson.put("actorId", a.getActorId());
+		actorJson.put("name", a.getName());
+		JSONArray movieArray = new JSONArray(a.getMovies());
+		actorJson.put("movies", movieArray);
+
+		return actorJson;
 	}
 
 	@Override
@@ -84,14 +95,19 @@ public class ActorServiceImpl implements ActorService {
 	}
 
 	@Override
-	public JSONObject getBaconPath(String actorId) {
+	public JSONObject getBaconPath(String actorId) throws JSONException, EntityNotFoundException {
 		// TODO Convert Path object to JSONObject here
-		return null;
+		List<String> bp = actorDAO.getBaconPath(actorId);
+		JSONObject json = new JSONObject();
+
+		JSONArray idArray = new JSONArray(bp);
+		json.put("baconPath", idArray);
+
+		return json;
 	}
 
 	@Override
-	public int getBaconNumber(String actorId) {
-		// TODO 
-		return 0;
+	public int getBaconNumber(String actorId) throws EntityNotFoundException {
+		return actorDAO.getBaconNumber(actorId);
 	}
 }

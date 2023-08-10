@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Value;
 
 import exceptions.EntityNotFoundException;
 
@@ -54,7 +55,7 @@ public class ActorDAOImpl implements ActorDAO {
 			Record r = sr.next();
 			actor.setActorId(r.get("id").asString());
 			actor.setName(r.get("name").asString());
-
+			actor.setMovies(r.get("movies").asList(Value::asString));
 			return actor;
 		} else {
 			throw new EntityNotFoundException();
@@ -77,8 +78,14 @@ public class ActorDAOImpl implements ActorDAO {
 	}
 
 	@Override
-	public List<Actor> getBaconPath(String actorId) throws EntityNotFoundException {
-		return null;
+	public List<String> getBaconPath(String actorId) throws EntityNotFoundException {
+		List<Object> objs = nb.bfs(actorId).get("idList").asList();
+		List<String> result = new ArrayList<>();
+		
+		for(Object o : objs) {
+			result.add(o.toString());
+		}
+		return result;
 	}
 
 	@Override

@@ -43,41 +43,42 @@ public class Neo4jBooks {
 	public <T> void addNode(String id, String name, Class<T> c) {
 		
 		try (Session session = driver.session()) {
-			String label = "", property = "", actorsList = "";
+			String label = "", property = "", list = "";
 			if (c == Movie.class) {
 				label = "x:movie";
 				property = "movieId";
-				actorsList = ", actors:[]";
+				list = ", actors:[]";
 			} else if (c == Actor.class) {
 				label = "x:actor";
 				property = "actorId";
+				list = ", movies:[]";
 			} else {
 				throw new InvalidRequestException();
 			}
-			String query = String.format("CREATE (%s {%s:$i, name:$n%s})", label, property, actorsList);
+			String query = String.format("CREATE (%s {%s:$i, name:$n%s})", label, property, list);
             session.writeTransaction(tx -> tx.run(query,
                     parameters("i", id, "n", name)));
 		}
 	}
 	
 	public <T> StatementResult getNode(String id, Class<T> c) throws EntityNotFoundException {
-		
 		try (Session session = driver.session()) {
 			try (Transaction tx = session.beginTransaction()) {
-				String label = "", property = "", actorList = "";
+				String label = "", property = "", list = "";
 				if (c == Movie.class) {
 					label = "x:movie";
 					property = "movieId";
-					actorList = ", x.actors AS actors";
+					list = ", x.actors AS actors";
 				} else if (c == Actor.class) {
 					label = "x:actor";
 					property = "actorId";
+					list = ", x.movies AS movies";
 				} else {
 					throw new EntityNotFoundException("No such type of record in our database.");
 				}
 				StatementResult sr = tx.run("MATCH (" + label + ")\n"
 						+ "WHERE x." + property + " = $i\n"
-						+ "RETURN x." + property + " AS id, x.name AS name" + actorList,
+						+ "RETURN x." + property + " AS id, x.name AS name" + list,
 						parameters("i", id)
 						);
 				if (sr.hasNext()) {
