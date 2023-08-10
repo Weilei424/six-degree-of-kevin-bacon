@@ -52,7 +52,7 @@ public class ActorStub implements ActorDAO {
 	}
 
 	@Override
-	public List<Actor> getBaconPath(String actorId) {
+	public List<String> getBaconPath(String actorId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
