@@ -5,7 +5,7 @@ import java.util.List;
 public class Actor {
 	private String actorId;
 	private String name;
-	private List<Movie> movies;
+	private List<String> movies;
 	
 	public Actor() {
 		super();
@@ -32,10 +32,13 @@ public class Actor {
 		this.name = name;
 	}
 	
-	public void setMovies(List<Movie> movies) {
+	public void setMovies(List<String> movies) {
 		this.movies = movies;
 	}
-	public void addMovie(Movie movie) {
+	public List<String> getMovies() {
+		return movies;
+	}
+	public void addMovie(String movie) {
 		movies.add(movie);
 	}
 	
