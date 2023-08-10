@@ -114,6 +114,7 @@ public class Neo4jBooks {
 			session.writeTransaction(tx -> tx.run("MATCH (a:actor {actorId: $x}), (b:movie {movieId: $y})\n"
 						+ "CREATE (a)-[r:ACTED_IN]->(b)\n"
 						+ "SET b.actors = b.actors +  a.actorId\n"
+						+ "SET a.movies = a.movies +  b.movieId\n"
 						+ "RETURN type(r)",
 						parameters("x", actorId, "y", movieId)
 						));
