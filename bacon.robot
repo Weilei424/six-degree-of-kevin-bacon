@@ -38,39 +38,50 @@ ${newMovie1name}    New Movie 1
 ${newMovie2id}    9002
 ${newMovie2name}    New Movie 2    
 *** Test Cases ***
+# initDemoDbPass
+
+# initDemoDbFail
+
 # addActorPass
+
 # addActorFail
+
 # addMoviePass
+
 # addMovieFail
+
 addRelationshipPass
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${params}=    Create Dictionary    actorId=${A30}    movieId=${M12}
     ${params_json}=    Convert To String    ${params}
     ${resp}=    PUT On Session    localhost    ${addRelationship}     data=${params_json}    headers=${headers}
     Should Be Equal As Strings    ${resp.status_code}    200
+
 addRelationshipFail
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${params1}=    Create Dictionary    actorId=${fakeActorId}    movieId=${M12}
     ${params_json1}=    Convert To String    ${params1}
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${addRelationship}    data=${params_json1}    headers=${headers}
 
-    ${params2}=    Create Dictionary    actorId=${A23}    movieId=${fakeMovieId}
+    ${params2}=    Create Dictionary    actorId=${A30}    movieId=${fakeMovieId}
     ${params_json2}=    Convert To String    ${params2}
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${addRelationship}    data=${params_json2}    headers=${headers}
 
-    ${params3}=    Create Dictionary    actorId=${A23}    movieId=${M12}
+    ${params3}=    Create Dictionary    actorId=${A30}    movieId=${M12}
     ${params_json3}=    Convert To String    ${params3}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    /addRELATIONSHIP    data=${params_json3}    headers=${headers}
 
-    ${params4}=    Create Dictionary    actorIdd=${A23}    movieId=${M12}
+    ${params4}=    Create Dictionary    actorIdd=${A30}    movieId=${M12}
     ${params_json4}=    Convert To String    ${params4}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json4}    headers=${headers}
 
-    ${params5}=    Create Dictionary    actorIdd=${A23}    
+    ${params5}=    Create Dictionary    actorIdd=${A30}    
     ${params_json5}=    Convert To String    ${params5}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json5}    headers=${headers}
 # getActorPass
+
 # getActorFail
+
 getMoviePass
     ${endpoint_with_param}=    Set Variable   ${getMovie}?${movieId}=${M1}
     ${resp}=    GET On Session    localhost    ${endpoint_with_param}
@@ -79,6 +90,7 @@ getMoviePass
     Should Be Equal As Strings    ${json['movieId']}    0001
     Should Be Equal As Strings    ${json['name']}    M1
     Should Be True    isinstance(${json['actors']}, list)     
+
 getMovieFail
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${endpoint_with_param1}=    Set Variable   ${getMovie}?${movieId}=${fakeMovieId} 
@@ -86,13 +98,14 @@ getMovieFail
 
     ${endpoint_with_param2}=    Set Variable   ${getMovie}?GETMOVIEEEEEE=${M1}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${endpoint_with_param2}    headers=${headers}
+
 hasRelationshipPass
-    ${endpoint_with_param1}=    Set Variable   ${hasRelationship}?${actorId}=${A23}&${movieId}=${M12}
+    ${endpoint_with_param1}=    Set Variable   ${hasRelationship}?${actorId}=${A30}&${movieId}=${M12}
     ${resp1}=    GET On Session    localhost    ${endpoint_with_param1}
     Should Be Equal As Strings    ${resp1.status_code}    200
     ${json1}=    To Json    ${resp1.content}
     Should Be Equal As Strings    ${json1['movieId']}    0012
-    Should Be Equal As Strings    ${json1['actorId']}    0023
+    Should Be Equal As Strings    ${json1['actorId']}    0030
     Should Be True    ${json1['hasRelationship']} 
 
     ${endpoint_with_param2}=    Set Variable   ${hasRelationship}?${actorId}=${A30}&${movieId}=${M1}
@@ -102,6 +115,7 @@ hasRelationshipPass
     Should Be Equal As Strings    ${json2['movieId']}    0001
     Should Be Equal As Strings    ${json2['actorId']}    0030
     Should Be True    not ${json2['hasRelationship']} 
+
 hasRelationshipFail
     ${endpoint_with_param1}=    Set Variable   ${hasRelationship}?${actorId}=${A23}&movieIddd=${M12}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${endpoint_with_param1} 
@@ -111,7 +125,11 @@ hasRelationshipFail
 
     ${endpoint_with_param3}=    Set Variable   ${hasRelationship}?${actorId}=${fakeActorId}&${movieId}=${M12}
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param3} 
+
 # computeBaconNumberPass
+
 # computeBaconNumberFail
+
 # computeBaconPathPass
+
 # computeBaconPathFail
