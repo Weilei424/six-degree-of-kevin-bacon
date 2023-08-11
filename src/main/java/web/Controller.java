@@ -72,6 +72,12 @@ public class Controller implements HttpHandler {
 			case "computeBaconPath":
 				computeBaconPath(request);
 				break;
+			case "initDemoDb":
+				initDemoDb(request);
+				break;
+			case "all":
+				deleteAll(request);
+				break;
 			default:
 				throw new InvalidRequestException("Invalid request");
 			}
@@ -144,6 +150,16 @@ public class Controller implements HttpHandler {
 
 	private void computeBaconPath(HttpExchange request) {
 
+	}
+	
+	private void initDemoDb(HttpExchange request) throws IOException {
+		Neo4jBooks.getInstance().initDemo();
+		response(request, "Demo database has been initialized.", HttpStatus.OK);
+	}
+	
+	private void deleteAll(HttpExchange request) throws IOException {
+		Neo4jBooks.getInstance().deleteAll();
+		response(request, "All data has been removed.", HttpStatus.NO_CONTENT);
 	}
 	
 	private void response(HttpExchange request, String response, int httpCode) throws IOException {
