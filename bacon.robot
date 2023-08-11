@@ -65,6 +65,10 @@ addRelationshipFail
     ${params4}=    Create Dictionary    actorIdd=${A23}    movieId=${M12}
     ${params_json4}=    Convert To String    ${params4}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json4}    headers=${headers}
+
+    ${params5}=    Create Dictionary    actorIdd=${A23}    
+    ${params_json5}=    Convert To String    ${params5}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json5}    headers=${headers}
 # getActorPass
 # getActorFail
 getMoviePass
@@ -94,11 +98,19 @@ hasRelationshipPass
     ${endpoint_with_param2}=    Set Variable   ${hasRelationship}?${actorId}=${A30}&${movieId}=${M1}
     ${resp2}=    GET On Session    localhost    ${endpoint_with_param2}
     Should Be Equal As Strings    ${resp2.status_code}    200
-    ${json2}=    To Json    ${resp1.content}
+    ${json2}=    To Json    ${resp2.content}
     Should Be Equal As Strings    ${json2['movieId']}    0001
     Should Be Equal As Strings    ${json2['actorId']}    0030
     Should Be True    not ${json2['hasRelationship']} 
-# hasRelationshipFail
+hasRelationshipFail
+    ${endpoint_with_param1}=    Set Variable   ${hasRelationship}?${actorId}=${A23}&movieIddd=${M12}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${endpoint_with_param1} 
+
+    ${endpoint_with_param2}=    Set Variable   ${hasRelationship}?${actorId}=${A23}&${movieId}=${fakeMovieId}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param2} 
+
+    ${endpoint_with_param3}=    Set Variable   ${hasRelationship}?${actorId}=${fakeActorId}&${movieId}=${M12}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param3} 
 # computeBaconNumberPass
 # computeBaconNumberFail
 # computeBaconPathPass
