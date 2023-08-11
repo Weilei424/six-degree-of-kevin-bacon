@@ -49,34 +49,74 @@ public class Controller implements HttpHandler {
 			
 			switch (path) {
 			case "addActor":
-				addActor(request);
+				if (request.getRequestMethod().equals("PUT")) {
+					addActor(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "addMovie":
-				addMovie(request);
+				if (request.getRequestMethod().equals("PUT")) {
+					addMovie(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "addRelationship":
-				addRelationship(request);
+				if (request.getRequestMethod().equals("PUT")) {
+					addRelationship(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "getActor":
-				getActor(request);
+				if (request.getRequestMethod().equals("GET")) {
+					getActor(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "getMovie":
-				getMovie(request);
+				if (request.getRequestMethod().equals("GET")) {
+					getMovie(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "hasRelationship":
-				hasRelationship(request);
+				if (request.getRequestMethod().equals("GET")) {
+					hasRelationship(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "computeBaconNumber":
-				computeBaconNumber(request);
+				if (request.getRequestMethod().equals("GET")) {
+					computeBaconNumber(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "computeBaconPath":
-				computeBaconPath(request);
+				if (request.getRequestMethod().equals("GET")) {
+					computeBaconPath(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "initDemoDb":
-				initDemoDb(request);
+				if (request.getRequestMethod().equals("POST")) {
+					initDemoDb(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			case "all":
-				deleteAll(request);
+				if (request.getRequestMethod().equals("DELETE")) {
+					deleteAll(request);
+				} else {
+					throw new InvalidRequestException("Invalid request");
+				}
 				break;
 			default:
 				throw new InvalidRequestException("Invalid request");
