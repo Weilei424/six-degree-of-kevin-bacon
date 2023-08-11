@@ -67,10 +67,13 @@ public class ActorServiceImpl implements ActorService {
 	}
 
 	@Override
-	public JSONObject hasRelationship(JSONObject jsonObject) throws EntityNotFoundException, JSONException {
+	public JSONObject hasRelationship(String actorId, String movieId) throws EntityNotFoundException, JSONException {
+		if (actorId == null || movieId == null) {
+			throw new InvalidRequestException("Invalid path");
+		}
+		
 		JSONObject responseJson = new JSONObject();
-		String actorId = jsonObject.getString("actorId");
-		String movieId = jsonObject.getString("movieId");
+		
 		actorDAO.getActor(actorId);
 		movieDAO.getMovie(movieId);
 		responseJson.put("actorId", actorId);

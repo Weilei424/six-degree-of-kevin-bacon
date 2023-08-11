@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.json.JSONException;
@@ -131,9 +132,8 @@ public class Controller implements HttpHandler {
 	}
 
 	private void hasRelationship(HttpExchange request) throws IOException, JSONException, EntityNotFoundException {
-	    // Parse the JSON request body to get the movieId and actorId
-	    JSONObject json = JSONObjectParser(request.getRequestBody());
-	    String response = actorService.hasRelationship(json).toString();
+	    Map<String, String> mapping = Utils.splitQuery(request.getRequestURI().getQuery());
+	    String response = actorService.hasRelationship(mapping.get("actorId"), mapping.get("movieId")).toString();
 	    response(request, response, HttpStatus.OK);
 
 	}
