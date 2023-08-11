@@ -116,48 +116,90 @@ CREATE (m1:movie {name: "M1", movieId: "0001", actors: []}),
        (a27:actor {name: "A27", actorId: "0027", movies: []}),
        (a28:actor {name: "A28", actorId: "0028", movies: []}),
        (a29:actor {name: "A29", actorId: "0029", movies: []}),
-       (a30:actor {name: "A30", actorId: "0030", movies: []}),
-       (ak)-[:ACTED_IN]->(m1),
-       (a1)-[:ACTED_IN]->(m1),
-       (a2)-[:ACTED_IN]->(m1),
-       (a2)-[:ACTED_IN]->(m2),
-       (a3)-[:ACTED_IN]->(m2),
-       (a4)-[:ACTED_IN]->(m2),
-       (a4)-[:ACTED_IN]->(m3),
-       (a4)-[:ACTED_IN]->(m4),
-       (a5)-[:ACTED_IN]->(m3),
-       (a5)-[:ACTED_IN]->(m5),
-       (a6)-[:ACTED_IN]->(m4),
-       (a6)-[:ACTED_IN]->(m6),
-       (a7)-[:ACTED_IN]->(m6),
-       (a7)-[:ACTED_IN]->(m7),
-       (a8)-[:ACTED_IN]->(m7),
-       (a8)-[:ACTED_IN]->(m8),
-       (a9)-[:ACTED_IN]->(m8),
-       (a9)-[:ACTED_IN]->(m9),
-       (a1)-[:ACTED_IN]->(m9),
-       (a10)-[:ACTED_IN]->(m2),
-       (a10)-[:ACTED_IN]->(m10),
-       (a10)-[:ACTED_IN]->(m9),
-       (a11)-[:ACTED_IN]->(m10),
-       (a12)-[:ACTED_IN]->(m10),
-       (a13)-[:ACTED_IN]->(m10),
-       (a14)-[:ACTED_IN]->(m5),
-       (a15)-[:ACTED_IN]->(m10),
-       (a16)-[:ACTED_IN]->(m7),
-       (a17)-[:ACTED_IN]->(m7),
-       (a18)-[:ACTED_IN]->(m6),
-       (a19)-[:ACTED_IN]->(m5),
-       (a20)-[:ACTED_IN]->(m3),
-       (a21)-[:ACTED_IN]->(m11),
-       (a22)-[:ACTED_IN]->(m11),
-       (a23)-[:ACTED_IN]->(m12),
-       (a24)-[:ACTED_IN]->(m4),
-       (a25)-[:ACTED_IN]->(m2),
-       (a26)-[:ACTED_IN]->(m8),
-       (a27)-[:ACTED_IN]->(m11),
-       (a28)-[:ACTED_IN]->(m4),
-       (a29)-[:ACTED_IN]->(m5)
+       (a30:actor {name: "A30", actorId: "0030", movies: []})
+WITH m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, ak, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30
+CREATE (ak)-[:ACTED_IN]->(m1)
+SET m1.actors = m1.actors + ak.actorId, ak.movies = ak.movies + m1.movieId
+CREATE (a1)-[:ACTED_IN]->(m1)
+SET m1.actors = m1.actors + a1.actorId, a1.movies = a1.movies + m1.movieId
+CREATE (a2)-[:ACTED_IN]->(m1)
+SET m1.actors = m1.actors + a2.actorId, a2.movies = a2.movies + m1.movieId
+CREATE (a2)-[:ACTED_IN]->(m2)
+SET m2.actors = m2.actors + a2.actorId, a2.movies = a2.movies + m2.movieId
+CREATE (a3)-[:ACTED_IN]->(m2)
+SET m2.actors = m2.actors + a3.actorId, a3.movies = a3.movies + m2.movieId
+CREATE (a4)-[:ACTED_IN]->(m2)
+SET m2.actors = m2.actors + a4.actorId, a4.movies = a4.movies + m2.movieId
+CREATE (a4)-[:ACTED_IN]->(m3)
+SET m3.actors = m3.actors + a4.actorId, a4.movies = a4.movies + m3.movieId
+CREATE (a4)-[:ACTED_IN]->(m4)
+SET m4.actors = m4.actors + a4.actorId, a4.movies = a4.movies + m4.movieId
+CREATE (a5)-[:ACTED_IN]->(m3)
+SET m3.actors = m3.actors + a5.actorId, a5.movies = a5.movies + m3.movieId
+CREATE (a5)-[:ACTED_IN]->(m5)
+SET m5.actors = m5.actors + a5.actorId, a5.movies = a5.movies + m5.movieId
+CREATE (a6)-[:ACTED_IN]->(m4)
+SET m4.actors = m4.actors + a6.actorId, a6.movies = a6.movies + m4.movieId
+CREATE (a6)-[:ACTED_IN]->(m6)
+SET m6.actors = m6.actors + a6.actorId, a6.movies = a6.movies + m6.movieId
+CREATE (a7)-[:ACTED_IN]->(m6)
+SET m6.actors = m6.actors + a7.actorId, a7.movies = a7.movies + m6.movieId
+CREATE (a7)-[:ACTED_IN]->(m7)
+SET m7.actors = m7.actors + a7.actorId, a7.movies = a7.movies + m7.movieId
+CREATE (a8)-[:ACTED_IN]->(m7)
+SET m7.actors = m7.actors + a8.actorId, a8.movies = a8.movies + m7.movieId
+CREATE (a8)-[:ACTED_IN]->(m8)
+SET m8.actors = m8.actors + a8.actorId, a8.movies = a8.movies + m8.movieId
+CREATE (a9)-[:ACTED_IN]->(m8)
+SET m8.actors = m8.actors + a9.actorId, a9.movies = a9.movies + m8.movieId
+CREATE (a9)-[:ACTED_IN]->(m9)
+SET m9.actors = m9.actors + a9.actorId, a9.movies = a9.movies + m9.movieId
+CREATE (a1)-[:ACTED_IN]->(m9)
+SET m9.actors = m9.actors + a1.actorId, a1.movies = a1.movies + m9.movieId
+CREATE (a10)-[:ACTED_IN]->(m2)
+SET m2.actors = m2.actors + a10.actorId, a10.movies = a10.movies + m2.movieId
+CREATE (a10)-[:ACTED_IN]->(m10)
+SET m10.actors = m10.actors + a10.actorId, a10.movies = a10.movies + m10.movieId
+CREATE (a10)-[:ACTED_IN]->(m9)
+SET m9.actors = m9.actors + a10.actorId, a10.movies = a10.movies + m9.movieId
+CREATE (a11)-[:ACTED_IN]->(m10)
+SET m10.actors = m10.actors + a11.actorId, a11.movies = a11.movies + m10.movieId
+CREATE (a12)-[:ACTED_IN]->(m10)
+SET m10.actors = m10.actors + a12.actorId, a12.movies = a12.movies + m10.movieId
+CREATE (a13)-[:ACTED_IN]->(m10)
+SET m10.actors = m10.actors + a13.actorId, a13.movies = a13.movies + m10.movieId
+CREATE (a14)-[:ACTED_IN]->(m5)
+SET m5.actors = m5.actors + a14.actorId, a14.movies = a14.movies + m5.movieId
+CREATE (a15)-[:ACTED_IN]->(m10)
+SET m10.actors = m10.actors + a15.actorId, a15.movies = a15.movies + m10.movieId
+CREATE (a16)-[:ACTED_IN]->(m7)
+SET m7.actors = m7.actors + a16.actorId, a16.movies = a16.movies + m7.movieId
+CREATE (a17)-[:ACTED_IN]->(m7)
+SET m7.actors = m7.actors + a17.actorId, a17.movies = a17.movies + m7.movieId
+CREATE (a18)-[:ACTED_IN]->(m6)
+SET m6.actors = m6.actors + a18.actorId, a18.movies = a18.movies + m6.movieId
+CREATE (a19)-[:ACTED_IN]->(m5)
+SET m5.actors = m5.actors + a19.actorId, a19.movies = a19.movies + m5.movieId
+CREATE (a20)-[:ACTED_IN]->(m3)
+SET m3.actors = m3.actors + a20.actorId, ak.movies = a20.movies + m3.movieId
+CREATE (a21)-[:ACTED_IN]->(m11)
+SET m11.actors = m11.actors + a21.actorId, a21.movies = a21.movies + m11.movieId
+CREATE (a22)-[:ACTED_IN]->(m11)
+SET m11.actors = m11.actors + a22.actorId, a22.movies = a22.movies + m11.movieId
+CREATE (a23)-[:ACTED_IN]->(m12)
+SET m12.actors = m12.actors + a23.actorId, a23.movies = a23.movies + m12.movieId
+CREATE (a24)-[:ACTED_IN]->(m4)
+SET m4.actors = m4.actors + a24.actorId, a24.movies = a24.movies + m4.movieId
+CREATE (a25)-[:ACTED_IN]->(m2)
+SET m2.actors = m2.actors + a25.actorId, a25.movies = a25.movies + m2.movieId
+CREATE (a26)-[:ACTED_IN]->(m8)
+SET m8.actors = m8.actors + a26.actorId, a26.movies = a26.movies + m8.movieId
+CREATE (a27)-[:ACTED_IN]->(m11)
+SET m11.actors = m11.actors + a27.actorId, a27.movies = a27.movies + m11.movieId
+CREATE (a28)-[:ACTED_IN]->(m4)
+SET m4.actors = m4.actors + a28.actorId, a28.movies = a28.movies + m4.movieId
+CREATE (a29)-[:ACTED_IN]->(m5)
+SET m5.actors = m5.actors + a29.actorId, a29.movies = a29.movies + m5.movieId
 RETURN m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, ak, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30;
 ```
 
