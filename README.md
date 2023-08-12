@@ -11,17 +11,17 @@
 
 # Robot Framework Test cases:
 ### addActorPass:
-- [ ] 200  OK
+- [x] 200  OK
 ### addActorFail:
-- [ ] 400  Path missing required information / Invalid path
-- [ ] 400  Request body improperly formatted
-- [ ] 400  Same node added twice
+- [x] 400  Path missing required information / Invalid path
+- [x] 400  Request body improperly formatted
+- [x] 400  Same node added twice
 ### addMoviePass:
-- [ ] 200  OK
+- [x] 200  OK
 ### addMovieFail:
-- [ ] 400  Path missing required information / Invalid path
-- [ ] 400  Request body improperly formatted
-- [ ] 400  Same node added twice
+- [x] 400  Path missing required information / Invalid path
+- [x] 400  Request body improperly formatted
+- [x] 400  Same node added twice
 ### addRelationshipPass:
 - [x] 200  OK
 ### addRelationshipFail:
@@ -31,10 +31,10 @@
 - [x] 404  Movie does not exist
 - [x] 400  Same relationship added twice
 ### getActorPass:
-- [ ] 200  OK
+- [x] 200  OK
 ### getActorFail:
-- [ ] 400  Path missing required information / Invalid path
-- [ ] 404  Actor does not exist
+- [x] 400  Path missing required information / Invalid path
+- [x] 404  Actor does not exist
 ### getMoviePass:
 - [x] 200  OK
 ### getMovieFail:
@@ -58,10 +58,10 @@
 - [ ] 400  Path missing required information / Invalid path
 - [ ] 404  Actor does not exist
 - [ ] 404  No path to Kevin Bacon
-### newFeaturePass:
-- [ ] 200  OK
-### newFeatureFail:
-
+### initDemoDbPass:
+- [x] 200  OK
+### initDemoDbFail:
+- [x] 400 DB not empty
 
 # Database setup for testing:
 
