@@ -99,10 +99,9 @@ public class ActorServiceImpl implements ActorService {
 
 	@Override
 	public JSONObject getBaconPath(String actorId) throws JSONException, EntityNotFoundException {
-		// TODO Convert Path object to JSONObject here
+		getActor(actorId);
 		List<String> bp = actorDAO.getBaconPath(actorId);
 		JSONObject json = new JSONObject();
-
 		JSONArray idArray = new JSONArray(bp);
 		json.put("baconPath", idArray);
 
@@ -110,7 +109,10 @@ public class ActorServiceImpl implements ActorService {
 	}
 
 	@Override
-	public int getBaconNumber(String actorId) throws EntityNotFoundException {
-		return actorDAO.getBaconNumber(actorId);
+	public JSONObject getBaconNumber(String actorId) throws EntityNotFoundException, JSONException {
+		JSONObject json = new JSONObject();
+		getActor(actorId);
+		json.put("baconNumber", actorDAO.getBaconNumber(actorId));
+		return json;
 	}
 }

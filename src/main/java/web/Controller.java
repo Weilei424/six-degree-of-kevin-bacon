@@ -181,15 +181,24 @@ public class Controller implements HttpHandler {
 	    Map<String, String> mapping = Utils.splitQuery(request.getRequestURI().getQuery());
 	    String response = actorService.hasRelationship(mapping.get("actorId"), mapping.get("movieId")).toString();
 	    response(request, response, HttpStatus.OK);
-
 	}
 
-	private void computeBaconNumber(HttpExchange request) {
-
+	private void computeBaconNumber(HttpExchange request) throws JSONException, EntityNotFoundException, IOException {
+		String query = request.getRequestURI().getRawQuery();
+		String endpoint = query.split("=")[0];
+		if (!endpoint.equals("actorId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
+		String response = actorService.getBaconNumber(query).toString();
+		response(request, response, HttpStatus.OK);
 	}
 
-	private void computeBaconPath(HttpExchange request) {
-
+	private void computeBaconPath(HttpExchange request) throws JSONException, EntityNotFoundException, IOException {
+		String query = request.getRequestURI().getRawQuery();
+		String endpoint = query.split("=")[0];
+		if (!endpoint.equals("actorId")) throw new JSONException("Invalid path");
+		query = query.split("=")[1];
+		String response = actorService.getBaconPath(query).toString();
+		response(request, response, HttpStatus.OK);
 	}
 	
 	private void initDemoDb(HttpExchange request) throws IOException {
