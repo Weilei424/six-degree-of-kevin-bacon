@@ -16,7 +16,7 @@ ${hasRelationship}    /hasRelationship
 ${computeBaconNumber}    /computeBaconNumber
 ${computeBaconPath}    /computeBaconPath
 ${initDemoDb}    /initDemoDb    # this path is for the new feature 
-${deleteAll}    /all    # this path is the setup before all test cases
+${deleteAll}    /nuke    # this path is the setup before all test cases
 ${newFeature}
 ${KevinBaconId}       nm1001231
 ${KevinBacon}    Kevin Bacon
