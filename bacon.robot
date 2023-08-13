@@ -21,7 +21,9 @@ ${newFeature}
 ${KevinBaconId}       nm1001231
 ${KevinBacon}    Kevin Bacon
 ${A01}    0001
+${A16}    0016
 ${A23}    0023
+${A24}    0024
 ${A30}    0030
 ${M1}    0001
 ${M9}    0009
@@ -128,27 +130,27 @@ addRelationshipFail
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${params1}=    Create Dictionary    actorId=${fakeActorId}    movieId=${M12}
     ${params_json1}=    Convert To String    ${params1}
-    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${addRelationship}    data=${params_json1}    headers=${headers}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    PUT On Session    localhost    ${addRelationship}    data=${params_json1}    headers=${headers}
 
     # movieId does not exist in db
     ${params2}=    Create Dictionary    actorId=${A30}    movieId=${fakeMovieId}
     ${params_json2}=    Convert To String    ${params2}
-    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${addRelationship}    data=${params_json2}    headers=${headers}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    PUT On Session    localhost    ${addRelationship}    data=${params_json2}    headers=${headers}
 
     # invalid path
     ${params3}=    Create Dictionary    actorId=${A30}    movieId=${M12}
     ${params_json3}=    Convert To String    ${params3}
-    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    /addRELATIONSHIP    data=${params_json3}    headers=${headers}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    PUT On Session    localhost    /addRELATIONSHIP    data=${params_json3}    headers=${headers}
 
     # relationship already exists
     ${params4}=    Create Dictionary    actorIdd=${newActor1id}    movieId=${newMovie1id}
     ${params_json4}=    Convert To String    ${params4}
-    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json4}    headers=${headers}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    PUT On Session    localhost    ${addRelationship}    data=${params_json4}    headers=${headers}
 
     # invalid json, missing item
     ${params5}=    Create Dictionary    actorIdd=${A30}    
     ${params_json5}=    Convert To String    ${params5}
-    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${addRelationship}    data=${params_json5}    headers=${headers}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    PUT On Session    localhost    ${addRelationship}    data=${params_json5}    headers=${headers}
 
 getActorPass
     ${endpoint_with_param}=    Set Variable   ${getActor}?${actorId}=${newActor1id}
@@ -161,7 +163,7 @@ getActorPass
     List Should Contain Value    ${json}    movies
 
 getActorFail
-    # actorId does not exists in db
+    # actorId does not exist in db
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${endpoint_with_param1}=    Set Variable   ${getActor}?${actorId}=${fakeActorId} 
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param1}  
@@ -183,7 +185,7 @@ getMoviePass
 
 
 getMovieFail
-    # movieId does not exists in db
+    # movieId does not exist in db
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${endpoint_with_param1}=    Set Variable   ${getMovie}?${movieId}=${fakeMovieId} 
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param1}  
@@ -214,18 +216,72 @@ hasRelationshipFail
     ${endpoint_with_param1}=    Set Variable   ${hasRelationship}?${actorId}=${A23}&movieIddd=${M12}
     Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${endpoint_with_param1} 
 
-    # movieId does not exists in db
+    # movieId does not exist in db
     ${endpoint_with_param2}=    Set Variable   ${hasRelationship}?${actorId}=${A23}&${movieId}=${fakeMovieId}
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param2} 
 
-    # actorId does not exists in db
+    # actorId does not exist in db
     ${endpoint_with_param3}=    Set Variable   ${hasRelationship}?${actorId}=${fakeActorId}&${movieId}=${M12}
     Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param3} 
 
-# computeBaconNumberPass
+computeBaconNumberPass
+    ${endpoint_with_param1}=    Set Variable   ${computeBaconNumber}?${actorId}=${A16}
+    ${resp1}=    GET On Session    localhost    ${endpoint_with_param1}
+    Should Be Equal As Strings    ${resp1.status_code}    200
+    ${json1}=    To Json    ${resp1.content}
+    Should Be Equal As Strings    ${json1['baconNumber']}    4
 
-# computeBaconNumberFail
+    ${endpoint_with_param2}=    Set Variable   ${computeBaconNumber}?${actorId}=${A24}
+    ${resp2}=    GET On Session    localhost    ${endpoint_with_param2}
+    Should Be Equal As Strings    ${resp2.status_code}    200
+    ${json2}=    To Json    ${resp2.content}
+    Should Be Equal As Strings    ${json2['baconNumber']}    3
 
-# computeBaconPathPass
+    # edge case where Kevin Bacon's id is passed
+    ${endpoint_with_param3}=    Set Variable   ${computeBaconNumber}?${actorId}=${KevinBaconId}
+    ${resp3}=    GET On Session    localhost    ${endpoint_with_param3}
+    Should Be Equal As Strings    ${resp3.status_code}    200
+    ${json3}=    To Json    ${resp3.content}
+    Should Be Equal As Strings    ${json3['baconNumber']}    0
 
-# computeBaconPathFail
+computeBaconNumberFail
+    # invalid path
+    ${endpoint_with_param1}=    Set Variable   ${computeBaconNumber}?$actor'id=${A16}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${endpoint_with_param1} 
+
+    # actorId does not exist in db
+    ${endpoint_with_param1}=    Set Variable   ${computeBaconNumber}?${actorId}=${fakeActorId}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param1} 
+
+    # there is no path from A30 to Kevin Bacon
+    ${endpoint_with_param1}=    Set Variable   ${computeBaconNumber}?${actorId}=${A30}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param1} 
+
+computeBaconPathPass
+    ${endpoint_with_param1}=    Set Variable   ${computeBaconPath}?${actorId}=${A16}
+    ${resp1}=    GET On Session    localhost    ${endpoint_with_param1}
+    Should Be Equal As Strings    ${resp1.status_code}    200
+    ${json1}=    To Json    ${resp1.content}
+    ${expected_bacon_path1}=    Create List    0016    0007    0008    0008    0009    0009    0001    0001    nm1001231
+    Lists Should Be Equal    ${json1['baconPath']}    ${expected_bacon_path1}
+
+    # edge case where path variable is Kevin Bacon's id
+    ${endpoint_with_param2}=    Set Variable   ${computeBaconPath}?${actorId}=${KevinBaconId}
+    ${resp2}=    GET On Session    localhost    ${endpoint_with_param2}
+    Should Be Equal As Strings    ${resp2.status_code}    200
+    ${json2}=    To Json    ${resp2.content}
+    ${expected_bacon_path2}=    Create List    nm1001231
+    Lists Should Be Equal    ${json2['baconPath']}    ${expected_bacon_path2}
+
+computeBaconPathFail
+    # invalid path
+    ${endpoint_with_param1}=    Set Variable   ${computeBaconPath}??id=${A16}
+    Run Keyword And Expect Error    *400 Client Error: Bad Request*    GET On Session    localhost    ${endpoint_with_param1}
+    
+    # actorId does not exist in db
+    ${endpoint_with_param2}=    Set Variable   ${computeBaconPath}?${actorId}=${fakeActorId}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param2}
+
+    # actor does not have a path to Kevin Bacon
+    ${endpoint_with_param2}=    Set Variable   ${computeBaconPath}?${actorId}=${A30}
+    Run Keyword And Expect Error    *404 Client Error: Not Found*    GET On Session    localhost    ${endpoint_with_param2}
