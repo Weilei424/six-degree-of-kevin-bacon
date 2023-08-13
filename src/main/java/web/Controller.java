@@ -111,7 +111,7 @@ public class Controller implements HttpHandler {
 					throw new InvalidRequestException("Invalid request");
 				}
 				break;
-			case "all":
+			case "nuke":
 				if (request.getRequestMethod().equals("DELETE")) {
 					deleteAll(request);
 				} else {
@@ -139,7 +139,7 @@ public class Controller implements HttpHandler {
 	private void addActor(HttpExchange request) throws JSONException, IOException, EntityNotFoundException, InvalidRequestException {
 		JSONObject jsonObject = JSONObjectParser(request.getRequestBody());
 		actorService.addActor(jsonObject);
-		response(request, "poggers addActor success", HttpStatus.OK);
+		response(request, "addActor successsful", HttpStatus.OK);
 	}
 
 	private void addMovie(HttpExchange request) throws JSONException, IOException, EntityNotFoundException, InvalidRequestException {
