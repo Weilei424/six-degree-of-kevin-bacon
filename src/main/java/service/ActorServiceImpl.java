@@ -1,24 +1,23 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import constants.Constants;
 import pojo.Actor;
-import pojo.Movie;
 import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
 import persistence.ActorDAO;
 import persistence.ActorDAOImpl;
-import persistence.ActorStub;
 import persistence.MovieDAO;
 import persistence.MovieDAOImpl;
 
 public class ActorServiceImpl implements ActorService {
 	
-	private ActorDAO stub = new ActorStub(); // Using stub db before we have actual db setup
 	private static ActorServiceImpl instance;
 	private ActorDAO actorDAO;
 	private MovieDAO movieDAO;
@@ -100,7 +99,13 @@ public class ActorServiceImpl implements ActorService {
 	@Override
 	public JSONObject getBaconPath(String actorId) throws JSONException, EntityNotFoundException {
 		getActor(actorId);
-		List<String> bp = actorDAO.getBaconPath(actorId);
+		List<String> bp;
+		if (actorId.equals(Constants.KEVIN_BACON_ID)) {
+			bp = new ArrayList<>();
+			bp.add(Constants.KEVIN_BACON_ID);
+		} else {
+			bp = actorDAO.getBaconPath(actorId);
+		}
 		JSONObject json = new JSONObject();
 		JSONArray idArray = new JSONArray(bp);
 		json.put("baconPath", idArray);
@@ -112,7 +117,13 @@ public class ActorServiceImpl implements ActorService {
 	public JSONObject getBaconNumber(String actorId) throws EntityNotFoundException, JSONException {
 		JSONObject json = new JSONObject();
 		getActor(actorId);
-		json.put("baconNumber", actorDAO.getBaconNumber(actorId));
+		int baconNumber;
+		if (actorId.equals(Constants.KEVIN_BACON_ID)) {
+			baconNumber = 0;
+		} else {
+			baconNumber = actorDAO.getBaconNumber(actorId);
+		}
+		json.put("baconNumber", baconNumber);
 		return json;
 	}
 }

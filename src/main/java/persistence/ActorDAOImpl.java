@@ -1,19 +1,7 @@
 package persistence;
 
-import org.neo4j.driver.v1.types.Path;
-
-import constants.Constants;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import java.util.Queue;
-import java.util.LinkedList;
-
-import java.util.Map;
-import java.util.HashMap;
-
-import java.util.Collections;
 
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
@@ -26,11 +14,10 @@ import pojo.Actor;
 public class ActorDAOImpl implements ActorDAO {
 	
 	private static ActorDAOImpl instance;
-	private Neo4jBooks nb;
-	private ActorStub stub;
+	private Neo4jBacon nb;
 
 	private ActorDAOImpl() {
-		nb = Neo4jBooks.getInstance();
+		nb = Neo4jBacon.getInstance();
 	}
 	
 	public static ActorDAOImpl getInstance() {

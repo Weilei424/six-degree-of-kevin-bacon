@@ -8,13 +8,10 @@ import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
 import persistence.MovieDAO;
 import persistence.MovieDAOImpl;
-import persistence.MovieStub;
-import pojo.Actor;
 import pojo.Movie;
 
 public class MovieServiceImpl implements MovieService {
 
-	private MovieDAO stub = new MovieStub(); // Using stub db before we have actual db setup
 	private static MovieServiceImpl instance;
 	private MovieDAO movieDAO;
 

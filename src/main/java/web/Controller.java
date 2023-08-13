@@ -18,7 +18,7 @@ import ca.yorku.eecs.Utils;
 import constants.HttpStatus;
 import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
-import persistence.Neo4jBooks;
+import persistence.Neo4jBacon;
 import service.*;
 
 public class Controller implements HttpHandler {
@@ -201,12 +201,12 @@ public class Controller implements HttpHandler {
 	}
 	
 	private void initDemoDb(HttpExchange request) throws IOException {
-		Neo4jBooks.getInstance().initDemo();
+		Neo4jBacon.getInstance().initDemo();
 		response(request, "Demo database has been initialized.", HttpStatus.OK);
 	}
 	
 	private void deleteAll(HttpExchange request) throws IOException {
-		Neo4jBooks.getInstance().deleteAll();
+		Neo4jBacon.getInstance().deleteAll();
 		response(request, "All data has been removed.", HttpStatus.NO_CONTENT);
 	}
 	

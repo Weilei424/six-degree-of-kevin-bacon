@@ -5,16 +5,15 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Value;
 
 import exceptions.EntityNotFoundException;
-import pojo.Actor;
 import pojo.Movie;
 
 public class MovieDAOImpl implements MovieDAO {
 	
 	private static MovieDAOImpl instance;
-	private Neo4jBooks nb;
+	private Neo4jBacon nb;
 	
 	private MovieDAOImpl() {
-		nb = Neo4jBooks.getInstance();
+		nb = Neo4jBacon.getInstance();
 	}
 	
 	public static MovieDAOImpl getInstance() {

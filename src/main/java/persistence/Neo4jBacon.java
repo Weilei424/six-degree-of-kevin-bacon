@@ -8,34 +8,31 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
-import org.neo4j.driver.v1.types.Path;
 
 import constants.Constants;
 
 import static org.neo4j.driver.v1.Values.parameters;
-
-import java.util.List;
 
 import pojo.Actor;
 import pojo.Movie;
 import exceptions.EntityNotFoundException;
 import exceptions.InvalidRequestException;
 
-public class Neo4jBooks {
+public class Neo4jBacon {
 	
-	private static Neo4jBooks instance;
+	private static Neo4jBacon instance;
 	private Driver driver;
 	private String uri;
 	
-	private Neo4jBooks() {
+	private Neo4jBacon() {
 		uri = "bolt://localhost:7687";
 		Config config = Config.build().withoutEncryption().build();
 		driver = GraphDatabase.driver(uri, AuthTokens.basic("neo4j", "12345678"), config);
 	}
 	
-	public static Neo4jBooks getInstance() {
+	public static Neo4jBacon getInstance() {
 		if (instance == null) {
-			instance = new Neo4jBooks();
+			instance = new Neo4jBacon();
 		}
 		return instance;
 	}
